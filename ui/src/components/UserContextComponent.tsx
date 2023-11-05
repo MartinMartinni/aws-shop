@@ -94,7 +94,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const setOrderItemsInCart = (orderItems: OrderItems[]) => {
         order.items = orderItems;
-        order.price = order.items.reduce((acc, currVal) => acc + currVal.subTotal, 0);
+        order.userId = order.userId ? order.userId : user?.id as string;
+        order.price = order.items.reduce((acc, currVal) => acc + currVal.subTotal ? currVal.subTotal : 0, 0);
         setOrder({...order});
         localStorage.setItem("order", JSON.stringify(order));
     }

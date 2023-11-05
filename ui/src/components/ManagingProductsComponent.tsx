@@ -81,21 +81,36 @@ const ManagingProductsComponent: React.FC<ManagingProductsComponentProps> = ({ p
     };
 
     const handleQuantityChange = (productToEdit: Product, val: number) => {
-        const updatedItem = { ...productToEdit, quantity: isNaN(val) || val < 0 ? 0 : val };
+        const updatedItem = { ...productToEdit, quantity: val < 0 ? 0 : val };
         setEditedProduct(updatedItem);
     };
 
     const handlePriceChange = (productToEdit: Product, val: number) => {
-        const updatedItem = { ...productToEdit, price: isNaN(val) || val < 0 ? 0 : val };
+        const updatedItem = { ...productToEdit, price: val < 0 ? 0 : val };
         setEditedProduct(updatedItem);
     };
 
-    const handleUpdate = () => {
-        if (editedProduct) {
-            productService.update(editedProduct.id, editedProduct);
-            setEditedProduct(undefined);
-            fetchProducts();
+    const handleUpdate = async () => {
+        if (!editedProduct)
+            return;
+
+        if (!editedProduct?.quantity || isNaN(editedProduct.quantity)) {
+            const product = products.find((p) => p.id === editedProduct.id);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            editedProduct.quantity = product?.quantity;
         }
+
+        if (!editedProduct?.price || isNaN(editedProduct.price)) {
+            const product = products.find((p) => p.id === editedProduct.id);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            editedProduct.price = product?.price;
+        }
+
+        await productService.update(editedProduct.id, editedProduct);
+        fetchProducts()
+        setEditedProduct(undefined);
     };
 
     const formatDateCreatedAt = (dateInput: string) => {

@@ -6,27 +6,31 @@ import {HttpService} from "./HttpService.ts";
 
 const userUrl = RestApiStack.RestApiEndpoint0551178A + "users";
 export class UserService {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     private user: User | undefined;
     private authService: AuthService;
     constructor(authService: AuthService) {
         this.authService = authService;
     }
-    public async getUser() : Promise<User> {
-        if (!this.user) {
-            try {
-                const result = await fetch(`${userUrl}?email=${this.authService.getUserName()}`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": AuthService.jwtToken!
-                    }
-                });
-                this.user = await result.json() as User;
-            } catch (e) {
-                console.error("Error: ", e);
-            }
+
+
+    public async getUser() : Promise<User | undefined> {
+        try {
+            console.log("this.authService.getUserName()", this.authService.getUserName());
+            const result = await fetch(`${userUrl}?email=${this.authService.getUserName()}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": AuthService.jwtToken!
+                }
+            });
+            this.user = await result.json() as User;
+        } catch (e) {
+            console.error("Error: ", e);
+            this.user = undefined;
         }
 
-        return this.user!;
+        return this.user;
     }
 
     public async updateAmountOfMoney(userId:string, amountOfMoney: number) : Promise<void> {

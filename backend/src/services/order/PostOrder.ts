@@ -19,6 +19,7 @@ export async function postOrder(event: APIGatewayProxyEvent, database: Database)
         console.log("open db connection");
         dbConn = await database.getConnection();
         const order = new Orders();
+        order.id = item.id;
         order.userId = item.userId;
         order.orderStatus = item.orderStatus;
         order.price = item.price;

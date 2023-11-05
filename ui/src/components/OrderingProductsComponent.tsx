@@ -24,17 +24,26 @@ const OrderingProductsComponent: React.FC<OrderingProductsComponentProps> = ({ p
         fetchProducts();
     }, [])
 
-    const handleQuantityChange = (orderItemToEdit: OrderItems, newQuantity: number) => {
-        if (newQuantity > 0) {
-            const updatedItem = { ...orderItemToEdit, quantity: newQuantity, subTotal: newQuantity * orderItemToEdit.price } as OrderItems;
-            setEditedOrderItem(updatedItem);
-        }
+    const handleQuantityChange = (orderItemToEdit: OrderItems, requiredQuantity: number, maxQuantity: number) => {
+        if (requiredQuantity <= 0 || requiredQuantity > maxQuantity)
+            return;
+
+        const updatedItem = { ...orderItemToEdit, quantity: requiredQuantity, subTotal: requiredQuantity * orderItemToEdit.price } as OrderItems;
+        setEditedOrderItem(updatedItem);
     };
 
     const handleUpdate = () => {
         if (!editedOrderItem)
             return;
-            
+
+        if (isNaN(editedOrderItem.quantity)) {
+            const product = order.items.find((p) => p.productId === editedOrderItem.productId);
+            editedOrderItem.quantity = product?.quantity as number;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            editedOrderItem.subTotal = editedOrderItem.quantity * product.subTotal;
+        }
+
         const updatedProducts = order.items.map((orderItemInCart) =>
             orderItemInCart.productId === editedOrderItem.productId ? editedOrderItem : orderItemInCart
         );
@@ -118,7 +127,7 @@ const OrderingProductsComponent: React.FC<OrderingProductsComponentProps> = ({ p
                                             type="number"
                                             value={editedOrderItem.quantity}
                                             onChange={(e) =>
-                                                handleQuantityChange(editedOrderItem, parseInt(e.target.value, 10))
+                                                handleQuantityChange(editedOrderItem, parseInt(e.target.value), product.quantity)
                                             }
                                         />
                                     ) : (<div>

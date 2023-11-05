@@ -4,25 +4,25 @@ import {ProductEntity} from "../entity/no-sql/Entities";
 
 export function validateAsProductsEntry(val: ProductEntity) {
     const missingFields = [] as RequestErrorField[];
-    if (val.name === undefined) {
+    if (!val.name) {
         missingFields.push({
             name: "name",
             path: "name"
         });
     }
-    if (val.img === undefined) {
+    if (!val.img) {
         missingFields.push({
             name: "img",
             path: "img"
         });
     }
-    if (val.price == undefined) {
+    if (!val.price) {
         missingFields.push({
             name: "price",
             path: "price"
         });
     }
-    if (val.quantity == undefined) {
+    if (!val.quantity) {
         missingFields.push({
             name: "quantity",
             path: "quantity"
@@ -36,19 +36,19 @@ export function validateAsProductsEntry(val: ProductEntity) {
 
 export function validateAsOrdersEntry(val: OrderEntry) {
     let missingFields = [] as RequestErrorField[];
-    if (val.userId === undefined) {
+    if (!val.userId) {
         missingFields.push({
             name: "userId",
             path: "userId"
         });
     }
-    if (val.orderStatus === undefined) {
+    if (!val.orderStatus) {
         missingFields.push({
             name: "orderStatus",
             path: "orderStatus"
         });
     }
-    if (val.price === undefined) {
+    if (!val.price) {
         missingFields.push({
             name: "price",
             path: "price"
@@ -57,7 +57,7 @@ export function validateAsOrdersEntry(val: OrderEntry) {
     const errorFields = validateAsAddressEntry(val.address);
     missingFields = missingFields.concat(errorFields);
 
-    if (val.items === undefined || val.items.length == 0) {
+    if (!val.items || val.items.length == 0) {
         missingFields.push({
             name: "items",
             path: "items"
@@ -65,25 +65,25 @@ export function validateAsOrdersEntry(val: OrderEntry) {
     } else {
         const items = val.items as OrderItemEntry[];
         items.forEach((item, i) => {
-            if (item.productId === undefined) {
+            if (!item.productId) {
                 missingFields.push({
                     name: "productId",
                     path: `items[${i}].productId`
                 });
             }
-            if (item.quantity === undefined) {
+            if (!item.quantity) {
                 missingFields.push({
                     name: "quantity",
                     path: `items[${i}].quantity`
                 });
             }
-            if (item.price === undefined) {
+            if (!item.price) {
                 missingFields.push({
                     name: "price",
                     path: `items[${i}].price`
                 });
             }
-            if (item.subTotal === undefined) {
+            if (!item.subTotal) {
                 missingFields.push({
                     name: "subTotal",
                     path: `items[${i}].subTotal`
@@ -119,13 +119,13 @@ export function validateAsAddressEntry(address: AddressEntry) : RequestErrorFiel
 
 export function validateAsPlaceOrderEntry(val: PlaceOrderEntry) {
     const missingFields = [] as RequestErrorField[];
-    if (val.orderId === undefined) {
+    if (!val.orderId) {
         missingFields.push({
             name: "orderId",
             path: "orderId"
         })
     }
-    if (val.userId === undefined) {
+    if (!val.userId) {
         missingFields.push({
             name: "userId",
             path: "userId"
@@ -138,7 +138,7 @@ export function validateAsPlaceOrderEntry(val: PlaceOrderEntry) {
 }
 
 export function validateAsUserCreditBankAccountEntry(val: UserCreditBankAccountEntry) {
-    if (val.amountOfMoney === undefined) {
+    if (!val.amountOfMoney) {
         throw new RequiredFieldRequestValidationError([], [{
             name: "amountOfMoney",
             path: "amountOfMoney"

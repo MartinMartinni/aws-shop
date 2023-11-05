@@ -125,19 +125,19 @@ const CreateAccountComponent: React.FC<CreateAccountComponentProps> = ({ authSer
                         <h2>Create Account</h2>
                     </div>
                     {message && message.success && (
-                        <Alert variant="success">
+                        <Alert variant="success" className="text-center">
                             {message.success}
                         </Alert>
                     )}
 
                     {message && message.info && (
-                        <Alert variant="info">
+                        <Alert variant="info" className="text-center">
                             {message.info}
                         </Alert>
                     )}
 
                     {message && message.error && (
-                        <Alert variant="danger">
+                        <Alert variant="danger" className="text-center">
                             {message.error}
                         </Alert>
                     )}

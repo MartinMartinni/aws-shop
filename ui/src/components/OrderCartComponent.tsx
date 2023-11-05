@@ -41,6 +41,7 @@ const OrderCartComponent: React.FC<OrderCartComponentProps> = ({ orderService })
             if (data.status === OrderStatus.COMPLETED) {
                 setMessage({"success": `${data.status}`});
                 setBlockButtons(true);
+                setOrderItemsInCart([]);
                 setTimeout(() => {
                     resetOrder();
                     navigate("/ordering-products");
