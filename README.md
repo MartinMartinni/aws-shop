@@ -98,3 +98,4 @@ npm run destroy-all
 - [reactive progress tracking](https://aws.amazon.com/blogs/compute/implementing-reactive-progress-tracking-for-aws-step-functions/)
 - [poll to push websockets](https://aws.amazon.com/blogs/compute/from-poll-to-push-transform-apis-using-amazon-api-gateway-rest-apis-and-websockets/)
 - [step functions error handling](https://dashbird.io/blog/aws-step-functions-error-handling/)
+- [initialize Amazon RDS](https://aws.amazon.com/blogs/infrastructure-and-automation/use-aws-cdk-to-initialize-amazon-rds-instances/)

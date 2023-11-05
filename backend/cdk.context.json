@@ -1,0 +1,73 @@
+{
+  "availability-zones:account=497565833070:region=eu-west-2": [
+    "eu-west-2a",
+    "eu-west-2b",
+    "eu-west-2c"
+  ],
+  "vpc-provider:account=497565833070:filter.vpc-id=vpc-07a0b872672ab1e3b:region=eu-west-2:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-07a0b872672ab1e3b",
+    "vpcCidrBlock": "10.0.0.0/16",
+    "ownerAccountId": "497565833070",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "ingress",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-08c9ecdbd9417ea58",
+            "cidr": "10.0.0.0/24",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-0ba5f8ee0886f598d"
+          },
+          {
+            "subnetId": "subnet-0119cd76c713ac76e",
+            "cidr": "10.0.1.0/24",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-001062ae76e2953fc"
+          }
+        ]
+      },
+      {
+        "name": "compute",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0b1fa5bff4718df3c",
+            "cidr": "10.0.2.0/24",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-0c48a8cb37353d391"
+          },
+          {
+            "subnetId": "subnet-0005a85afb1762d38",
+            "cidr": "10.0.3.0/24",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-0e63005fa7189d75f"
+          }
+        ]
+      },
+      {
+        "name": "rds",
+        "type": "Isolated",
+        "subnets": [
+          {
+            "subnetId": "subnet-04f71fb2ec95734c4",
+            "cidr": "10.0.4.0/28",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-00da8e753b36bb298"
+          },
+          {
+            "subnetId": "subnet-06682379c0894a5cb",
+            "cidr": "10.0.4.16/28",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-050b57ff7c5c6a432"
+          }
+        ]
+      }
+    ]
+  },
+  "security-group:account=497565833070:region=eu-west-2:securityGroupId=sg-01a195f8f069700ff": {
+    "securityGroupId": "sg-01a195f8f069700ff",
+    "allowAllOutbound": false
+  }
+}

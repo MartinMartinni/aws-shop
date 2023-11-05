@@ -1,0 +1,85 @@
+{
+  "PhotoBucket": {
+    "ExportsOutputRefFinderPhotosA5296B1681DE2D67": "finder-photos-021fbb46bca1",
+    "FinderPhotosBucketName": "finder-photos-021fbb46bca1",
+    "ExportsOutputFnGetAttFinderPhotosA5296B16Arn53235368": "arn:aws:s3:::finder-photos-021fbb46bca1"
+  },
+  "ProductStackProductDataStackC1C5C377": {
+    "ExportsOutputFnGetAttProductTableB8D4E9EDArn9E8D595F": "arn:aws:dynamodb:eu-central-1:497565833070:table/product-0234f48bfcdd",
+    "ExportsOutputRefProductSoldTable6604A625424D6F37": "product-sold-0234f48bfcdd",
+    "ExportsOutputRefProductTableB8D4E9ED1EF21745": "product-0234f48bfcdd",
+    "ExportsOutputFnGetAttProductSoldTable6604A625ArnC95F35F7": "arn:aws:dynamodb:eu-central-1:497565833070:table/product-sold-0234f48bfcdd"
+  },
+  "RdsInitStack": {
+    "RdsInitFnResponse": "{\"status\":\"OK\",\"results\":[[{\"fieldCount\":0,\"affectedRows\":0,\"insertId\":0,\"info\":\"\",\"serverStatus\":16394,\"warningStatus\":0,\"stateChanges\":{\"systemVariables\":{},\"schema\":\"main\",\"gtids\":[],\"trackStateChange\":null},\"changedRows\":0},{\"fieldCount\":0,\"affectedRows\":0,\"insertId\":0,\"info\":\"\",\"serverStatus\":10,\"warningStatus\":1,\"changedRows\":0},{\"fieldCount\":0,\"affectedRows\":0,\"insertId\":0,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":1,\"changedRows\":0}],[null,null,null]],\"config\":{\"dbname\":\"main\",\"host\":\"mysql.ccojva7nwwei.eu-central-1.rds.amazonaws.com\",\"user\":\"admin\",\"password\":\"TfzumgLh-sF6_HH7MrVDgYmif81XJ,\",\"multipleStatements\":true},\"dbSecret\":{\"ARN\":\"arn:aws:secretsmanager:eu-central-1:497565833070:secret:RdsInitStackMysqlRdsInstanc-5U23hO9JpORE-wMqi1U\",\"Name\":\"RdsInitStackMysqlRdsInstanc-5U23hO9JpORE\",\"VersionId\":\"6140aaf4-a44b-4843-96ee-85e91550fc6c\",\"SecretString\":\"{\\\"password\\\":\\\"TfzumgLh-sF6_HH7MrVDgYmif81XJ,\\\",\\\"dbname\\\":\\\"main\\\",\\\"engine\\\":\\\"mysql\\\",\\\"port\\\":3306,\\\"dbInstanceIdentifier\\\":\\\"mysql\\\",\\\"host\\\":\\\"mysql.ccojva7nwwei.eu-central-1.rds.amazonaws.com\\\",\\\"username\\\":\\\"admin\\\"}\",\"VersionStages\":[\"AWSCURRENT\"],\"CreatedDate\":\"2023-11-05T11:14:28.074Z\"}}",
+    "ArnDatabaseSecret": "arn:aws:secretsmanager:eu-central-1:497565833070:secret:RdsInitStackMysqlRdsInstanc-5U23hO9JpORE-wMqi1U",
+    "ExportsOutputRefMysqlRdsInstanceSecretAttachment044FE35D5257F8AE": "arn:aws:secretsmanager:eu-central-1:497565833070:secret:RdsInitStackMysqlRdsInstanc-5U23hO9JpORE-wMqi1U",
+    "ExportsOutputFnGetAttRdsSecurityGroup632A77E4GroupId9D343172": "sg-0ef685e3a8bfa3a51",
+    "ExportsOutputRefMyVPCcomputeSubnet1Subnet13EB6C6DA570383C": "subnet-08878b9b726d68da6",
+    "ExportsOutputRefMyVPCcomputeSubnet2SubnetC720E99964A99A11": "subnet-080a214f5fd4bca87"
+  },
+  "UserStackUserDataStackD4454DDE": {
+    "ExportsOutputFnGetAttUserTableBD4BF69EArn9A5B685A": "arn:aws:dynamodb:eu-central-1:497565833070:table/user-0a06aec9bbcb",
+    "ExportsOutputFnGetAttUserCreditBankAccountHistoryTable316A6D8BArn6617CB06": "arn:aws:dynamodb:eu-central-1:497565833070:table/user-credit-bank-account-history-0a06aec9bbcb",
+    "ExportsOutputRefUserTableBD4BF69E1F4D2BA4": "user-0a06aec9bbcb",
+    "ExportsOutputRefUserCreditBankAccountHistoryTable316A6D8B06D2082A": "user-credit-bank-account-history-0a06aec9bbcb"
+  },
+  "EventBridgeStack": {
+    "ExportsOutputFnGetAttOrderStatusEventBridge17D2E681Arn9AAFD626": "arn:aws:events:eu-central-1:497565833070:event-bus/order-status-0a8bff52e041",
+    "ExportsOutputRefOrderStatusEventBridge17D2E68100E10D00": "order-status-0a8bff52e041"
+  },
+  "StepFunctionOrderWorkflowStackShipmentStepFunctionCaseStack82AFFB40": {
+    "ExportsOutputFnGetAttShipmentStepFunctionCaseStackCaseLambda99DEC739Arn26D765F5": "arn:aws:lambda:eu-central-1:497565833070:function:shipment-case-020350b800a1"
+  },
+  "AuthStack": {
+    "ExportsOutputFnGetAttUserPool6BA7E5F2Arn686ACC00": "arn:aws:cognito-idp:eu-central-1:497565833070:userpool/eu-central-1_Cs6JKCIqq",
+    "UserPoolClientId": "3c60islud73vhgjtv4smn5tmse",
+    "UserPoolId": "eu-central-1_Cs6JKCIqq",
+    "ExportsOutputRefUserPool6BA7E5F296FD7236": "eu-central-1_Cs6JKCIqq",
+    "IdentityPoolId": "eu-central-1:2bc7dc72-b004-4084-b4f1-01ccbcb98d83"
+  },
+  "ProductStackProductLambdaStackCF15634B": {
+    "ExportsOutputFnGetAttProductLambda4F8330F3ArnFD343DB9": "arn:aws:lambda:eu-central-1:497565833070:function:product-0682b7a8244b"
+  },
+  "StepFunctionOrderWorkflowStackWarehouseStepFunctionCaseStackA8755A63": {
+    "ExportsOutputFnGetAttWarehouseStepFunctionCaseStackCaseLambda08A5A4F7Arn84144D3B": "arn:aws:lambda:eu-central-1:497565833070:function:warehouse-case-0a012b3a1f85"
+  },
+  "StepFunctionOrderWorkflowStackWarehouseRevertStepFunctionCaseStackC12701ED": {
+    "ExportsOutputFnGetAttWarehouseRevertStepFunctionCaseStackCaseLambda2B522EB8ArnDCBC6F04": "arn:aws:lambda:eu-central-1:497565833070:function:warehouse-revert-0a6860baa1c9"
+  },
+  "OrderStackOrderLambdaStack6BE05478": {
+    "ExportsOutputFnGetAttOrderLambda008D7AE5Arn8D73BF12": "arn:aws:lambda:eu-central-1:497565833070:function:order-0a8bff52e041"
+  },
+  "StepFunctionOrderWorkflowStackOrderFinalizationStepFunctionCaseStack1340F42A": {
+    "ExportsOutputFnGetAttConnectionsTable8000B8A1Arn6FD6777C": "arn:aws:dynamodb:eu-central-1:497565833070:table/connection-028511a2d5e7",
+    "ExportsOutputFnGetAttOrderFinalizationStepFunctionCaseStackCaseLambdaC441D866Arn8BC4DD0F": "arn:aws:lambda:eu-central-1:497565833070:function:order-finalization-case-028511a2d5e7",
+    "ExportsOutputRefConnectionsTable8000B8A13717867F": "connection-028511a2d5e7"
+  },
+  "UserStackUserLambdaStack6D4D7A73": {
+    "ExportsOutputFnGetAttUserLambdaAD4FB23BArn07701568": "arn:aws:lambda:eu-central-1:497565833070:function:user-02768d055b03"
+  },
+  "UserStackUserCreditBankAccountLambdaStack44F2689E": {
+    "ExportsOutputFnGetAttUserCreditBankAccountHistoryLambdaA2E7628AArnD238F729": "arn:aws:lambda:eu-central-1:497565833070:function:user-credit-bank-account-history-026bbd26f35d"
+  },
+  "StepFunctionOrderWorkflowStackOrderStepFunctionCaseStack529300B1": {
+    "ExportsOutputFnGetAttOrderStepFunctionCaseStackCaseLambda285FCEDCArn200F76CF": "arn:aws:lambda:eu-central-1:497565833070:function:order-case-0a5dc3c48313"
+  },
+  "StepFunctionOrderWorkflowStackPaymentStepFunctionCaseStack293EB701": {
+    "ExportsOutputFnGetAttPaymentStepFunctionCaseStackCaseLambda531B2C61ArnE0922872": "arn:aws:lambda:eu-central-1:497565833070:function:payment-case-02651dd99a9f"
+  },
+  "UserStackUserPostConfirmationTriggerLambdaStackA17E2C7C": {
+    "ExportsOutputFnGetAttUserPostConfirmationTriggerLambda98F2B77FArnCF6C9E65": "arn:aws:lambda:eu-central-1:497565833070:function:user-post-confirmation-trigger-064327da77ff"
+  },
+  "WebSocketApiStack": {
+    "WebSocketApiName": "Place order status tracker Websocket API",
+    "WebSocketApiId": "j69i109f0f",
+    "ExportsOutputRefPlaceOrderStatusTrackerWebsocketApi56740C3443959962": "j69i109f0f",
+    "WebSocketApiEndpoint": "wss://j69i109f0f.execute-api.eu-central-1.amazonaws.com"
+  },
+  "StepFunctionOrderWorkflowStack": {
+    "ExportsOutputRefStateMachineOrderWorkflow60C9B792FEEA296C": "arn:aws:states:eu-central-1:497565833070:stateMachine:StateMachineOrderWorkflow60C9B792-4whM18Ltk0Q1"
+  },
+  "RestApiStack": {
+    "RestApiEndpoint0551178A": "https://noa96abj11.execute-api.eu-central-1.amazonaws.com/prod/"
+  }
+}
