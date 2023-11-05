@@ -1,8 +1,8 @@
 # SHOP BASED ON AWS (CDK)
 
 The application presents SHOP based on AWS. Consist of two parts:
-- [Frontend(UI)](https://github.com/MartinMartinni/aws-test-project/blob/master/ui/README.md) in React + TypeScript + Vite
-- [Backend](https://github.com/MartinMartinni/aws-test-project/blob/master/backend/README.md) in AWS + CDK + TypeScript
+- [Frontend(UI)](https://github.com/MartinMartinni/aws-shop/blob/main/ui/README.md) in React + TypeScript + Vite
+- [Backend](https://github.com/MartinMartinni/aws-shop/blob/main/backend/README.md) in AWS + CDK + TypeScript
 
 > :warning:  **The application will still be improvement**
 #### In the near future I am expecting to add:
