@@ -4,7 +4,7 @@ The application presents SHOP based on AWS. Consist of two parts:
 - [Frontend(UI)](https://github.com/MartinMartinni/aws-shop/blob/main/ui/README.md) in React + TypeScript + Vite
 - [Backend](https://github.com/MartinMartinni/aws-shop/blob/main/backend/README.md) in AWS + CDK + TypeScript
 
-> :warning:  **The application will still be improvement**
+> :warning:  **The application will still be improved**
 #### In the near future I am expecting to add:
 - CI\CD
 - Tests
