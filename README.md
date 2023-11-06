@@ -47,7 +47,7 @@ The application presents SHOP based on AWS. Consist of two parts:
 cd backend
 ```
 
-2.install dependencies
+2.Install dependencies
 ```
 npm install
 ```
@@ -63,7 +63,7 @@ npm run deploy-backend
 cd ./../ui/
 ```
 
-5.install dependencies
+5.Install dependencies
 ```
 npm install
 ```
