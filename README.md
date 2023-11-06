@@ -20,7 +20,7 @@ The application presents SHOP based on AWS. Consist of two parts:
 - Amplify
 
 ## The most interesting part is place order:
-![alt text](https://github.com/MartinMartinni/aws-test-project/blob/integration-ui-with-backend/place_order_workflow.drawio.png)
+![alt text](https://github.com/MartinMartinni/aws-shop/blob/main/place_order_workflow.drawio.png)
 
 1. The user establishes connection by the websocket
 2. ConnectionId(websocket connection identifier) and executionName(placer order execution identifier) are saved in database "Connection Table"
