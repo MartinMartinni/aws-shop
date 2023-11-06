@@ -39,7 +39,12 @@ Backend application for SHOP based on AWS.
 cd backend
 ```
 
-2.Deploy the backend along with generating cdk-outputs.json file in the ui location with information about provisioned infrastructure.
+2.Install dependencies
+```
+npm install
+```
+
+3.Deploy the backend along with generating cdk-outputs.json file in the ui location with information about provisioned infrastructure.
 That will be imported for integration with the backend app (without asking about grant access).
 ```
 npm run deploy-backend
