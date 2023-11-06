@@ -10,7 +10,7 @@ Frontend application for SHOP based on AWS
 - Amplify (AWS)
 
 ## Run App:
-> :warning:  **To deploy the UI, you need to first deploy the backend. Otherwise, the UI will not be able to connect with the backend. It is recommended to deploy using [this documentation](https://github.com/MartinMartinni/aws-test-project)**
+> :warning:  **To deploy the UI, you need to first deploy the backend. Otherwise, the UI will not be able to connect with the backend. It is recommended to deploy using [this documentation](https://github.com/MartinMartinni/aws-shop)**
 
 1.Go to the UI directory
 ```
