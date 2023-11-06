@@ -37,7 +37,11 @@ cd ./../backend
 npm run deploy-ui
 ```
 
-6.To visit the site go to the cdk-outputs.json in the backend folder, get FinderUrl and past it in the browser
+6.The url to the site you can get:
+- from terminal under the key FinderUrl
+- in the file backend/cdk-outputs.json under the key FinderUrl
+
+Past it in the browser
 
 ## Create user account:
 1.Go to the login page and click "Create account". You can create user for two roles:

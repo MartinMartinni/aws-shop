@@ -44,10 +44,10 @@ cd backend
 npm install
 ```
 
-3.Deploy the backend along with generating cdk-outputs.json file in the ui location with information about provisioned infrastructure.
-That will be imported for integration with the backend app (without asking about grant access).
+3.Deploy all stacks along with generating cdk-outputs.json file in the UI location, with information about provisioned infrastructure,
+which are imported for integration with backend app (without asking about grant access).
 ```
-npm run deploy-backend
+npm run deploy-all
 ```
 
 ## Stop App:
