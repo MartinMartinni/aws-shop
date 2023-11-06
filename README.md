@@ -47,38 +47,43 @@ The application presents SHOP based on AWS. Consist of two parts:
 cd backend
 ```
 
-2.Deploy backend along with generating cdk-outputs.json file in the UI location, with information about provisioned infrastructure,
+2.install dependencies
+```
+npm install
+```
+
+3.Deploy backend along with generating cdk-outputs.json file in the UI location, with information about provisioned infrastructure,
 which are imported for integration with backend app (without asking about grant access).
 ```
 npm run deploy-backend
 ```
 
-3.Go to the UI directory
+4.Go to the UI directory
 ```
 cd ./../ui/
 ```
 
-4.install dependencies
+5.install dependencies
 ```
 npm install
 ```
 
-5.Build the UI
+6.Build the UI
 ```
 npm run build
 ```
 
-6.Go to the backend directory
+7.Go to the backend directory
 ```
 cd ./../backend
 ```
 
-7.Deploy the UI
+8.Deploy the UI
 ```
 npm run deploy-ui
 ```
 
-8.To visit the site go to the cdk-outputs.json in the backend folder, get FinderUrl and past it in the browser
+9.To visit the site go to the cdk-outputs.json in the backend folder, get FinderUrl and past it in the browser
 
 ## Create user account:
 1.Go to the login page and click "Create account". You can create user for two roles:
