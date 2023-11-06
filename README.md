@@ -52,10 +52,10 @@ cd backend
 npm install
 ```
 
-3.Deploy backend along with generating cdk-outputs.json file in the UI location, with information about provisioned infrastructure,
+3.Deploy all stacks along with generating cdk-outputs.json file in the UI location, with information about provisioned infrastructure,
 which are imported for integration with backend app (without asking about grant access).
 ```
-npm run deploy-backend
+npm run deploy-all
 ```
 
 4.Go to the UI directory
@@ -83,7 +83,11 @@ cd ./../backend
 npm run deploy-ui
 ```
 
-9.To visit the site go to the cdk-outputs.json in the backend folder, get FinderUrl and past it in the browser
+9.The url to the site you can get:
+- from terminal under the key FinderUrl
+- in the file backend/cdk-outputs.json under the key FinderUrl
+
+Past it in the browser
 
 ## Create user account:
 1.Go to the login page and click "Create account". You can create user for two roles:

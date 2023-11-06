@@ -72,7 +72,6 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ props }) => {
                 const activeOrders = await props.orderService.findAllActiveByUserId(user.id) as Order[];
                 console.log("activeOrders: ", activeOrders);
 
-                // todo: activeOrders
                 if (activeOrders.length) {
                     setOrder(activeOrders[0]);
                 } else {

@@ -7,9 +7,9 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "deploy-backend": "chmod +x deploy-backend.sh && deploy-backend.sh",
+    "deploy-all": "cdk deploy --all --require-approval never --outputs-file ./../ui/cdk-outputs.json",
     "deploy-ui": "cdk deploy UiDeploymentStack --require-approval never --outputs-file ./cdk-outputs.json",
-    "destroy-all": "cdk destroy OrderStatusResultLambdaStack AuthStack && cdk destroy --all"
+    "destroy-all": "cdk destroy UserStack/UserPostConfirmationTriggerLambdaStack/UserPostConfirmationTriggerUpdateUserPoolLambdaStack OrderStatusResultLambdaStack AuthStack && cdk destroy --all"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",

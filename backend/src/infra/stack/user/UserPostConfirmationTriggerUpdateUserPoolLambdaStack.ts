@@ -18,8 +18,7 @@ export class UserPostConfirmationTriggerUpdateUserPoolLambdaStack extends Stack 
     constructor(scope: Construct, id: string, props: UserPostConfirmationTriggerCustomResourceLambdaStackProps) {
         super(scope, id, props);
 
-        const self = this;
-        const suffix = getSuffixFromStack(self);
+        const suffix = getSuffixFromStack(this);
 
         const lambda = new NodejsFunction(this, "UserPostConfirmationTriggerUpdateUserPoolLambda", {
             functionName: `user-post-confirmation-trigger-update-user-pool-${suffix}`,
