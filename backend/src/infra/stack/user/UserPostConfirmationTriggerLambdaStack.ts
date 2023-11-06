@@ -8,7 +8,7 @@ import {Effect, PolicyStatement, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import {getSuffixFromStack} from "../utils/Utils";
 import {UserPool} from "aws-cdk-lib/aws-cognito";
 import {AuthStack} from "../AuthStack";
-import {UserPostConfirmationTriggerCustomResourceLambdaStack} from "./UserPostConfirmationTriggerCustomResourceLambdaStack";
+import {UserPostConfirmationTriggerUpdateUserPoolLambdaStack} from "./UserPostConfirmationTriggerUpdateUserPoolLambdaStack";
 
 
 export interface UserPostConfirmationTriggerLambdaStackProps extends StackProps {
@@ -18,14 +18,14 @@ export interface UserPostConfirmationTriggerLambdaStackProps extends StackProps 
 }
 
 export class UserPostConfirmationTriggerLambdaStack extends Stack {
-    public readonly lambdaFunction: NodejsFunction;
+    public readonly postConfirmationLambdaFunction: NodejsFunction;
 
     constructor(scope: Construct, id: string, props: UserPostConfirmationTriggerLambdaStackProps) {
         super(scope, id, props);
 
         const suffix = getSuffixFromStack(this);
 
-        this.lambdaFunction = new NodejsFunction(this, "UserPostConfirmationTriggerLambda", {
+        this.postConfirmationLambdaFunction = new NodejsFunction(this, "UserPostConfirmationTriggerLambda", {
             functionName: `user-post-confirmation-trigger-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
@@ -40,7 +40,7 @@ export class UserPostConfirmationTriggerLambdaStack extends Stack {
             timeout: Duration.minutes(1)
         });
 
-        this.lambdaFunction.addToRolePolicy(new PolicyStatement({
+        this.postConfirmationLambdaFunction.addToRolePolicy(new PolicyStatement({
             effect: Effect.ALLOW,
             resources: [props.userTable.tableArn],
             actions: [
@@ -49,7 +49,7 @@ export class UserPostConfirmationTriggerLambdaStack extends Stack {
             ]
         }));
 
-        this.lambdaFunction.addToRolePolicy(new PolicyStatement({
+        this.postConfirmationLambdaFunction.addToRolePolicy(new PolicyStatement({
             effect: Effect.ALLOW,
             resources: [props.userCreditBankAccountTable.tableArn],
             actions: [
@@ -57,7 +57,7 @@ export class UserPostConfirmationTriggerLambdaStack extends Stack {
             ]
         }));
 
-        this.lambdaFunction.addToRolePolicy(
+        this.postConfirmationLambdaFunction.addToRolePolicy(
             new PolicyStatement({
                 effect: Effect.ALLOW,
                 resources: [props.userPool.userPoolArn],
@@ -67,9 +67,9 @@ export class UserPostConfirmationTriggerLambdaStack extends Stack {
             })
         );
 
-        const userPostConfirmationTriggerCustomResourceLambdaStack = new UserPostConfirmationTriggerCustomResourceLambdaStack(this, "UserPostConfirmationTriggerCustomResourceLambdaStack", {
+        const userPostConfirmationTriggerUpdateUserPoolLambdaStack = new UserPostConfirmationTriggerUpdateUserPoolLambdaStack(this, "UserPostConfirmationTriggerUpdateUserPoolLambdaStack", {
             userPool: props.userPool,
-            lambdaFunction: this.lambdaFunction
+            postConfirmationLambdaFunction: this.postConfirmationLambdaFunction
         });
 
         const invokeCognitoTriggerPermission = {
@@ -77,6 +77,6 @@ export class UserPostConfirmationTriggerLambdaStack extends Stack {
             sourceArn: props.userPool.userPoolArn
         }
 
-        this.lambdaFunction.addPermission('InvokePreSignUpHandlerPermission', invokeCognitoTriggerPermission)
+        this.postConfirmationLambdaFunction.addPermission('InvokePreSignUpHandlerPermission', invokeCognitoTriggerPermission)
     }
 }

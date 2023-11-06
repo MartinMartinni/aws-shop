@@ -10,10 +10,10 @@ import {getSuffixFromStack} from "../utils/Utils";
 
 export interface UserPostConfirmationTriggerCustomResourceLambdaStackProps extends StackProps {
     userPool: UserPool
-    lambdaFunction: Function
+    postConfirmationLambdaFunction: Function
 }
 
-export class UserPostConfirmationTriggerCustomResourceLambdaStack extends Stack {
+export class UserPostConfirmationTriggerUpdateUserPoolLambdaStack extends Stack {
 
     constructor(scope: Construct, id: string, props: UserPostConfirmationTriggerCustomResourceLambdaStackProps) {
         super(scope, id, props);
@@ -21,14 +21,14 @@ export class UserPostConfirmationTriggerCustomResourceLambdaStack extends Stack 
         const self = this;
         const suffix = getSuffixFromStack(self);
 
-        const lambda = new NodejsFunction(this, "UserPostConfirmationTriggerCustomResourceLambda", {
-            functionName: `user-post-confirmation-trigger-custom-resource-${suffix}`,
+        const lambda = new NodejsFunction(this, "UserPostConfirmationTriggerUpdateUserPoolLambda", {
+            functionName: `user-post-confirmation-trigger-update-user-pool-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
-            entry: (join(__dirname, "..", "..", "..", "services", "user", "post-confirmation-trigger", "settingTrigger.ts")),
+            entry: (join(__dirname, "..", "..", "..", "services", "user", "post-confirmation-trigger", "updateUserPool.ts")),
             environment: {
                 USER_POOL_ID: props.userPool.userPoolId,
-                POST_CONFIRMATION_TRIGGER: props.lambdaFunction.functionArn
+                POST_CONFIRMATION_TRIGGER: props.postConfirmationLambdaFunction.functionArn
             },
             tracing: Tracing.ACTIVE,
             timeout: Duration.minutes(1)
@@ -43,7 +43,7 @@ export class UserPostConfirmationTriggerCustomResourceLambdaStack extends Stack 
             physicalResourceId: PhysicalResourceId.of(`${id}-AwsSdkCall-${lambda.currentVersion.version}`)
         }
 
-        const customResourceFnRole = new Role(this, "AwsCustomResourceUserPostConfirmationRole", {
+        const customResourceFnRole = new Role(this, "UserPostConfirmationTriggerUpdateUserPoolAwsCustomResourceRole", {
             assumedBy: new ServicePrincipal("lambda.amazonaws.com")
         })
         customResourceFnRole.addToPolicy(
@@ -64,7 +64,7 @@ export class UserPostConfirmationTriggerCustomResourceLambdaStack extends Stack 
             })
         );
 
-        new AwsCustomResource(this, "AwsCustomResource", {
+        new AwsCustomResource(this, "UserPostConfirmationTriggerUpdateUserPoolAwsCustomResource", {
             policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: AwsCustomResourcePolicy.ANY_RESOURCE }),
             onUpdate: sdkCall,
             timeout: Duration.minutes(10),
