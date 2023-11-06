@@ -19,7 +19,7 @@ Backend application for SHOP based on AWS.
 - Amplify
 
 ## Place order process:
-![alt text](https://github.com/MartinMartinni/aws-test-project/blob/integration-ui-with-backend/place_order_workflow.drawio.png)
+![alt text](https://github.com/MartinMartinni/aws-shop/blob/main/place_order_workflow.drawio.png)
 
 1. The user establishes connection by the websocket
 2. ConnectionId(websocket connection identifier) and executionName(placer order execution identifier) are saved in database "Connection Table"
