@@ -109,69 +109,72 @@ const OrderingProductsComponent: React.FC<OrderingProductsComponentProps> = ({ p
                         </thead>
                         <tbody>
                         {products?.map((product: Product) => (
-                            <tr key={product.id}>
-                                <td>{product.name}</td>
-                                <td>
-                                    <img
-                                        src={product.img}
-                                        alt={product.name}
-                                        style={{ maxWidth: "100px" }}
-                                    />
-                                </td>
-                                <td style={{maxWidth: 80, minWidth: 80}}>
-                                    {product.price}
-                                </td>
-                                <td style={{maxWidth: 80, minWidth: 80}}>
-                                    {editedOrderItem && editedOrderItem.productId === product.id ? (
-                                        <FormControl
-                                            type="number"
-                                            value={editedOrderItem.quantity}
-                                            onChange={(e) =>
-                                                handleQuantityChange(editedOrderItem, parseInt(e.target.value), product.quantity)
-                                            }
+                            product.quantity > 0 ?
+                                <tr key={product.id}>
+                                    <td>{product.name}</td>
+                                    <td>
+                                        <img
+                                            src={product.img}
+                                            alt={product.name}
+                                            style={{ maxWidth: "100px" }}
                                         />
-                                    ) : (<div>
-                                            {order.items.filter((orderItemInCart: OrderItems) => orderItemInCart.productId === product.id).length
-                                                ? (
-                                                    (order.items.find((orderItemInCart: OrderItems) => orderItemInCart.productId === product.id)?.quantity) + "/" + product.quantity
-                                                ) : (
-                                                    product.quantity
-                                            )}
-                                        </div>
-                                    )}
-                                </td>
-                                <td style={{width: 450}}>
-                                    {editedOrderItem && editedOrderItem.productId === product.id ? (
-                                        <div>
-                                            <Button className="mx-3" variant="success" onClick={handleUpdate} style={{width: 150}}>
-                                                Update
-                                            </Button>
-                                            <Button className="mx-3" variant="danger" onClick={handleUndo} style={{width: 170}}>
-                                                undo
-                                            </Button>
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            {order.items.filter((orderItemInCart: OrderItems) => orderItemInCart.productId === product.id).length
-                                                ? (
-                                                    <div>
-                                                        <Button className="mx-3" variant="warning" onClick={() => setEditedOrderItemFromProduct(product)} style={{width: 150}}>
-                                                            Set quantity
+                                    </td>
+                                    <td style={{maxWidth: 80, minWidth: 80}}>
+                                        {product.price}
+                                    </td>
+                                    <td style={{maxWidth: 80, minWidth: 80}}>
+                                        {editedOrderItem && editedOrderItem.productId === product.id ? (
+                                            <FormControl
+                                                type="number"
+                                                value={editedOrderItem.quantity}
+                                                onChange={(e) =>
+                                                    handleQuantityChange(editedOrderItem, parseInt(e.target.value), product.quantity)
+                                                }
+                                            />
+                                        ) : (<div>
+                                                {order.items.filter((orderItemInCart: OrderItems) => orderItemInCart.productId === product.id).length
+                                                    ? (
+                                                        (order.items.find((orderItemInCart: OrderItems) => orderItemInCart.productId === product.id)?.quantity) + "/" + product.quantity
+                                                    ) : (
+                                                        product.quantity
+                                                )}
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td style={{width: 450}}>
+                                        {editedOrderItem && editedOrderItem.productId === product.id ? (
+                                            <div>
+                                                <Button className="mx-3" variant="success" onClick={handleUpdate} style={{width: 150}}>
+                                                    Update
+                                                </Button>
+                                                <Button className="mx-3" variant="danger" onClick={handleUndo} style={{width: 170}}>
+                                                    undo
+                                                </Button>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                {order.items.filter((orderItemInCart: OrderItems) => orderItemInCart.productId === product.id).length
+                                                    ? (
+                                                        <div>
+                                                            <Button className="mx-3" variant="warning" onClick={() => setEditedOrderItemFromProduct(product)} style={{width: 150}}>
+                                                                Set quantity
+                                                            </Button>
+                                                            <Button className="mx-3" variant="danger" onClick={() => handleRemoveProductFromCart(product.id)} style={{width: 170}}>
+                                                                Remove from cart
+                                                            </Button>
+                                                        </div>
+                                                    ) : (
+                                                        <Button className="mx-3" variant="success" onClick={() => handleAddCart(product)} style={{width: 170}}>
+                                                            Add to cart
                                                         </Button>
-                                                        <Button className="mx-3" variant="danger" onClick={() => handleRemoveProductFromCart(product.id)} style={{width: 170}}>
-                                                            Remove from cart
-                                                        </Button>
-                                                    </div>
-                                                ) : (
-                                                    <Button className="mx-3" variant="success" onClick={() => handleAddCart(product)} style={{width: 170}}>
-                                                        Add to cart
-                                                    </Button>
-                                                )
-                                            }
-                                        </div>
-                                    )}
-                                </td>
-                            </tr>
+                                                    )
+                                                }
+                                            </div>
+                                        )}
+                                    </td>
+                                </tr>
+                            :
+                                <tr></tr>
                         ))}
                         </tbody>
                     </Table>
