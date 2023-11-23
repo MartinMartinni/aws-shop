@@ -9,7 +9,7 @@ Frontend application for SHOP based on AWS
 - Vite
 - Amplify (AWS)
 
-## Run App:
+## How to run APP:
 > :warning:  **To deploy the UI, you need to first deploy the backend. Otherwise, the UI will not be able to connect with the backend. It is recommended to deploy using [this documentation](https://github.com/MartinMartinni/aws-shop)**
 
 1.Go to the UI directory
@@ -37,20 +37,20 @@ cd ./../backend
 npm run deploy-ui
 ```
 
-6.The url to the site you can get:
+6.Find URL by:
 - from terminal under the key FinderUrl
 - in the file backend/cdk-outputs.json under the key FinderUrl
 
-Past it in the browser
+Paste it in the browser
 
 ## Create user account:
 1.Go to the login page and click "Create account". You can create user for two roles:
-- User (place order)
+- User (placing order)
 - Admin (can do that what can do user + managing products)
 
-> :warning:  **Don't forget about verification by email!!**
+> :warning:  **Don't forget to verify your email!!**
 
-## Stop App:
+## How to stop App:
 ```
 npm run destroy-all
 ```
