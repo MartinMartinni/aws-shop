@@ -1,6 +1,6 @@
 # SHOP BASED ON AWS (CDK)
 
-The application presents SHOP based on AWS. Consist of two parts:
+The project is a web application which is a shop based on AWS. The two parts are:
 - [Frontend(UI)](https://github.com/MartinMartinni/aws-shop/blob/main/ui/README.md) in React + TypeScript + Vite
 - [Backend](https://github.com/MartinMartinni/aws-shop/blob/main/backend/README.md) in AWS + CDK + TypeScript
 
@@ -22,26 +22,26 @@ The application presents SHOP based on AWS. Consist of two parts:
 ## The most interesting part is place order:
 ![alt text](https://github.com/MartinMartinni/aws-shop/blob/main/place_order_workflow.drawio.png)
 
-1. The user establishes connection by the websocket
+1. The user establishes connection by websocket
 2. ConnectionId(websocket connection identifier) and executionName(placer order execution identifier) are saved in database "Connection Table"
 3. The user sends request place order by REST API with orderId(order already created) and executionName.
 4. AWS Step function workflow is started:
 - (order case) get order
 - (warehouse case) check, reserve products in warehouse
-- (payment case) check user has enough money to fulfilment order and charge him
-- (shipment/warehouse revert case) payment success - prepare shipment/payment error - revert products to the warehouse
-- (finalization case) update order status in order, handling errors when any occur
+- (payment case) check user has enough money to fulfil order and charge them
+- (shipment/warehouse revert case) if payment success - prepare shipment. Else if payment error - revert products to the warehouse
+- (finalization case) update order status in order, handle errors when any occur
 5. Send result message about success or error to the event bridge
 6. Finding connectionId in database "Connection Table" by the executionName and send result message to the user by the websocket
 
 ## Functionalities:
 - create user account
-- create and managing products
+- create and manage products
 - place order
 - get fulfilment orders
 - managing user bank account - deposit, withdraw money
 
-## Run App:
+## How to run APP:
 1.Go to the backend directory
 ```
 cd backend
@@ -83,20 +83,20 @@ cd ./../backend
 npm run deploy-ui
 ```
 
-9.The url to the site you can get:
+9.Find URL by:
 - from terminal under the key FinderUrl
 - in the file backend/cdk-outputs.json under the key FinderUrl
 
-Past it in the browser
+Paste it in the browser
 
 ## Create user account:
 1.Go to the login page and click "Create account". You can create user for two roles:
-- User (place order)
+- User (placing order)
 - Admin (can do that what can do user + managing products)
 
-> :warning:  **Don't forget about verification by email!!**
+> :warning:  **Don't forget to verify your email!!**
 
-## Stop App:
+## How to stop App:
 Remember to choose "y" to continue process of removing resources
 ```
 npm run destroy-all
