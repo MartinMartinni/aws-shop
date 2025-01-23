@@ -3,7 +3,7 @@ import {UserDynamoDBRepository} from "../../repository/UserDynamoDBRepository";
 import {UserBankAccountHistoryDynamoDBRepository} from "../../repository/UserBankAccountHistoryDynamoDBRepository";
 import {UserBankAccountHistoryEntity, UserRole} from "../../entity/no-sql/Entities";
 import {TransferType} from "../../model/Models";
-import {SignupCognitoUserEvent} from "./SignupCognitoUserEvent";
+import {SignupCognitoUserEvent} from "./../update-user-pool/SignupCognitoUserEvent";
 import {addCorsHeader, getErrorResponse, getResponseFor} from "../../utils/HttpUtils";
 import {NotFoundError, RequestValidationError, RequiredFieldRequestValidationError} from "../../exception/Exceptions";
 
@@ -31,20 +31,30 @@ export async function handler(event: SignupCognitoUserEvent, context: Context) :
             }
 
             const role = userAttributes["custom:role"];
+
+            const user = await userDynamoDBRepository.findByEmail(userAttributes.email);
+            if (user) {
+                response = getResponseFor(200, event);
+                context.done(undefined, event);
+
+                addCorsHeader(response);
+                return response;
+            }
+
             await userDynamoDBRepository.save({
                 id: "",
                 sub: userAttributes.sub,
                 name: event.userName,
                 email: userAttributes.email,
-                emailVerified: false,
+                emailVerified: event.request.userAttributes.email_verified,
                 amountOfMoney: amountOfMoney,
                 role: role,
                 createdAt: ""
             });
 
-            const user = await userDynamoDBRepository.findByEmail(userAttributes.email);
+            const savedUser = await userDynamoDBRepository.findByEmail(userAttributes.email);
 
-            if (!user) {
+            if (!savedUser) {
                 throw new NotFoundError("User", [{
                     name: "email",
                     value: userAttributes.email
@@ -66,7 +76,7 @@ export async function handler(event: SignupCognitoUserEvent, context: Context) :
 
             await userBankAccountHistoryDynamoDBRepository.save({
                 amountOfMoney: amountOfMoney,
-                userId: user?.id,
+                userId: savedUser?.id,
                 transferType: TransferType.CREDIT,
             } as UserBankAccountHistoryEntity);
 

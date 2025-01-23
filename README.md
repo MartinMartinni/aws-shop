@@ -42,6 +42,7 @@ The project is a web application which is a shop based on AWS. The two parts are
 - managing user bank account - deposit, withdraw money
 
 ## How to run APP:
+
 1.Go to the backend directory
 ```
 cd backend

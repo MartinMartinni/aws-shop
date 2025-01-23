@@ -8,7 +8,6 @@ import {Effect, PolicyStatement, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import {getSuffixFromStack} from "../utils/Utils";
 import {UserPool} from "aws-cdk-lib/aws-cognito";
 import {AuthStack} from "../AuthStack";
-import {UserPostConfirmationTriggerUpdateUserPoolLambdaStack} from "./UserPostConfirmationTriggerUpdateUserPoolLambdaStack";
 
 
 export interface UserPostConfirmationTriggerLambdaStackProps extends StackProps {
@@ -67,16 +66,11 @@ export class UserPostConfirmationTriggerLambdaStack extends Stack {
             })
         );
 
-        const userPostConfirmationTriggerUpdateUserPoolLambdaStack = new UserPostConfirmationTriggerUpdateUserPoolLambdaStack(this, "UserPostConfirmationTriggerUpdateUserPoolLambdaStack", {
-            userPool: props.userPool,
-            postConfirmationLambdaFunction: this.postConfirmationLambdaFunction
-        });
-
         const invokeCognitoTriggerPermission = {
             principal: new ServicePrincipal('cognito-idp.amazonaws.com'),
             sourceArn: props.userPool.userPoolArn
         }
 
-        this.postConfirmationLambdaFunction.addPermission('InvokePreSignUpHandlerPermission', invokeCognitoTriggerPermission)
+        this.postConfirmationLambdaFunction.addPermission('InvokePreSignUpHandlerPermission', invokeCognitoTriggerPermission);
     }
 }

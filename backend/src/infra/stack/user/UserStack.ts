@@ -7,10 +7,13 @@ import {UserCreditBankAccountLambdaStack} from "./UserCreditBankAccountLambdaSta
 import {LambdaIntegration} from "aws-cdk-lib/aws-apigateway";
 import {UserPool} from "aws-cdk-lib/aws-cognito";
 import {UserPostConfirmationTriggerLambdaStack} from "./UserPostConfirmationTriggerLambdaStack";
+import {UserPreSignUpTriggerLambdaStack} from "./UserPreSignUpTriggerLambdaStack";
+import {UpdateUserPoolStack} from "./UpdateUserPoolStack";
 
 export interface UserStackProps extends StackProps {
     userPool: UserPool
 }
+
 export class UserStack extends Stack {
 
     public readonly userTable: ITable;
@@ -29,11 +32,22 @@ export class UserStack extends Stack {
             userTable: this.userTable,
             userCreditBankAccountTable: this.userBankAccountHistoryTable
         });
+
+        const userPreSignUpTriggerLambdaStack = new UserPreSignUpTriggerLambdaStack(this, "UserPreSignUpTriggerLambdaStack", {
+            userPool: props.userPool
+        });
+
         const userPostConfirmationTriggerLambdaStack = new UserPostConfirmationTriggerLambdaStack(this, "UserPostConfirmationTriggerLambdaStack", {
             userTable: this.userTable,
             userCreditBankAccountTable: this.userBankAccountHistoryTable,
             userPool: props.userPool
         });
+
+        const updateUserPoolStack = new UpdateUserPoolStack(this, "UpdateUserPoolStack", {
+            userPool: props.userPool,
+            postConfirmationLambdaFunction: userPostConfirmationTriggerLambdaStack.postConfirmationLambdaFunction,
+            preSignUpLambdaFunction: userPreSignUpTriggerLambdaStack.preSignUpLambdaFunction
+        })
 
         const userCreditBankAccountLambdaStack = new UserCreditBankAccountLambdaStack(this, "UserCreditBankAccountLambdaStack", {
             userCreditBankAccountTable: this.userBankAccountHistoryTable

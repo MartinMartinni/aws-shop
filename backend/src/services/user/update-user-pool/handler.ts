@@ -1,16 +1,16 @@
 import {SignupCognitoUserEvent} from "./SignupCognitoUserEvent";
 import {APIGatewayProxyResult, Context} from "aws-lambda";
 import * as AWS from "aws-sdk";
-const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
 
+const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
 const userPoolId = process.env.USER_POOL_ID!;
-const postConfirmationTrigger = process.env.POST_CONFIRMATION_TRIGGER!;
 
 export async function handler(event: SignupCognitoUserEvent, context: Context) : Promise<APIGatewayProxyResult> {
 
     try {
         console.log("userPoolId: ", process.env.USER_POOL_ID);
-        console.log("postConfirmationTrigger: ", process.env.POST_CONFIRMATION_TRIGGER)
+        console.log("postConfirmationTrigger: ", process.env.POST_CONFIRMATION_TRIGGER);
+        console.log("preSignUpTrigger: ", process.env.PRE_SIGN_UP_TRIGGER);
 
         const describeUserPoolResult = await cognitoIdentityServiceProvider.describeUserPool({
             UserPoolId: userPoolId
@@ -20,7 +20,8 @@ export async function handler(event: SignupCognitoUserEvent, context: Context) :
 
         if (describeUserPoolResult?.UserPool &&
             describeUserPoolResult.UserPool.LambdaConfig) {
-            describeUserPoolResult.UserPool.LambdaConfig.PostConfirmation = postConfirmationTrigger;
+            describeUserPoolResult.UserPool.LambdaConfig.PostConfirmation = process.env.POST_CONFIRMATION_TRIGGER!;
+            describeUserPoolResult.UserPool.LambdaConfig.PreSignUp = process.env.PRE_SIGN_UP_TRIGGER!;
         } else {
             const message = `Error: operation cannot be performed because result?.UserPool?.LambdaConfig return: ${describeUserPoolResult?.UserPool?.LambdaConfig}`;
             console.error(message);

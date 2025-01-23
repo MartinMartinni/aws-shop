@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Alert, Button, Col, Container, FormControl, Row, Table} from "react-bootstrap";
-import {Address, Order, OrderItems, OrderStatus, RequestErrorField} from "../model/Models";
+import {Address, Order, OrderItems, OrderStatus, RequestErrorField} from "../model/Models.ts";
 import {OrderService} from "../services/OrderService.ts";
 import {WebSocketApiStack} from "../../cdk-outputs.json";
 import {useUserContext} from "./UserContextComponent.tsx";

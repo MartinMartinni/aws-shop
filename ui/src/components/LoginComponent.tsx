@@ -60,7 +60,7 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ props }) => {
 
             if (loginResponse) {
                 console.log("I have been logged successfully")
-                const user = await props.userService.getUser();
+                const user = await props.userService.getUser(AuthService.jwtToken!);
 
                 if (!user)
                     throw new Error(`User by username: ${username} not found!`);

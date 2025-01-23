@@ -8,14 +8,15 @@ import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import {join} from "path";
 import {getSuffixFromStack} from "../utils/Utils";
 
-export interface UserPostConfirmationTriggerCustomResourceLambdaStackProps extends StackProps {
+export interface UpdateUserPoolStackProps extends StackProps {
     userPool: UserPool
-    postConfirmationLambdaFunction: Function
+    postConfirmationLambdaFunction: Function,
+    preSignUpLambdaFunction: Function
 }
 
-export class UserPostConfirmationTriggerUpdateUserPoolLambdaStack extends Stack {
+export class UpdateUserPoolStack extends Stack {
 
-    constructor(scope: Construct, id: string, props: UserPostConfirmationTriggerCustomResourceLambdaStackProps) {
+    constructor(scope: Construct, id: string, props: UpdateUserPoolStackProps) {
         super(scope, id, props);
 
         const suffix = getSuffixFromStack(this);
@@ -24,10 +25,11 @@ export class UserPostConfirmationTriggerUpdateUserPoolLambdaStack extends Stack 
             functionName: `user-post-confirmation-trigger-update-user-pool-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
-            entry: (join(__dirname, "..", "..", "..", "services", "user", "post-confirmation-trigger", "updateUserPool.ts")),
+            entry: (join(__dirname, "..", "..", "..", "services", "user", "update-user-pool", "handler.ts")),
             environment: {
                 USER_POOL_ID: props.userPool.userPoolId,
-                POST_CONFIRMATION_TRIGGER: props.postConfirmationLambdaFunction.functionArn
+                POST_CONFIRMATION_TRIGGER: props.postConfirmationLambdaFunction.functionArn,
+                PRE_SIGN_UP_TRIGGER: props.preSignUpLambdaFunction.functionArn
             },
             tracing: Tracing.ACTIVE,
             timeout: Duration.minutes(1)
@@ -68,6 +70,6 @@ export class UserPostConfirmationTriggerUpdateUserPoolLambdaStack extends Stack 
             onUpdate: sdkCall,
             timeout: Duration.minutes(10),
             role: customResourceFnRole
-        })
+        });
     }
 }

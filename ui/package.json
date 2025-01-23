@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -11,26 +14,33 @@
   },
   "dependencies": {
     "@aws-amplify/auth": "^5.6.5",
+    "@aws-cdk/integ-tests-alpha": "^2.164.1-alpha.0",
     "@aws-sdk/client-cognito-identity": "^3.427.0",
     "@aws-sdk/client-s3": "^3.438.0",
     "@aws-sdk/credential-providers": "^3.427.0",
     "aws-amplify": "^5.3.11",
     "bootstrap": "^5.3.2",
+    "esbuild": "~0.21",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "aws-cdk-lib": "^2.98.0",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }

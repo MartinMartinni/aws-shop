@@ -40,7 +40,7 @@ export class HttpService {
                 throw new HttpError(response);
             }
 
-            console.log("response: ", response);
+            // console.log("response: ", response);
             return response;
         } catch (e) {
             console.error("Error: ", e);

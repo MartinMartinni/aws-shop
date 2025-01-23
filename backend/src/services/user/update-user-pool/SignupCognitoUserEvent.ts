@@ -6,7 +6,8 @@ interface SignupCognitoUserRequestUserAttributesEvent {
     name: string,
     sub: string,
     "custom:amountOfMoney": number,
-    "custom:role": UserRole
+    "custom:role": UserRole,
+    "custom:domain": string
 }
 
 interface SignupCognitoUserRequestEvent {

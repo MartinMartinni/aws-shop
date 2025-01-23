@@ -28,4 +28,14 @@ export class ProductService extends AbstractService<Product> {
             throw e;
         }
     }
+
+    public async deleteByIds(ids: string[]) : Promise<void> {
+        try {
+            await HttpService.fetch(`${this.url}?ids=${ids}`, {
+                method: "DELETE"
+            })
+        } catch (e) {
+            console.error("Error: ", e);
+        }
+    }
 }

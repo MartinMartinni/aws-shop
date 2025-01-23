@@ -41,7 +41,8 @@ export class ProductLambdaStack extends Stack {
                 "dynamodb:GetItem",
                 "dynamodb:UpdateItem",
                 "dynamodb:DeleteItem",
-                "dynamodb:BatchGetItem"
+                "dynamodb:BatchGetItem",
+                "dynamodb:BatchWriteItem"
             ]
         }));
 

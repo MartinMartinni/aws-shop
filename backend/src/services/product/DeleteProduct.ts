@@ -5,11 +5,16 @@ import {getResponseFor} from "../utils/HttpUtils";
 
 export async function deleteProduct(event: APIGatewayProxyEvent, repository:  ProductDynamoDBRepository): Promise<APIGatewayProxyResult> {
 
-    if (!event.queryStringParameters || !event.queryStringParameters["id"]) {
-        throw new RequiredFieldRequestValidationError(["id"], []);
+    if (!event.queryStringParameters || !event.queryStringParameters["id"] && !event.queryStringParameters["ids"]) {
+        throw new RequiredFieldRequestValidationError(["id", "ids"], []);
     }
 
-    await repository.deleteById(event.queryStringParameters["id"]);
+    if (event.queryStringParameters["ids"]) {
+        const ids = event.queryStringParameters["ids"].split(",") as string[];
+        await repository.deleteByIds(ids);
+        return getResponseFor(204, {message: ""});
+    }
 
+    await repository.deleteById(event.queryStringParameters["id"]!);
     return getResponseFor(204, {message: ""});
 }

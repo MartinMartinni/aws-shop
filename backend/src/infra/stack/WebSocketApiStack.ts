@@ -61,7 +61,7 @@ export class WebSocketApiStack extends Stack {
             defaultRouteOptions: {integration: new WebSocketLambdaIntegration("DefaultIntegration", onMessageHandler)}
         });
 
-        webSocketApi.addRoute("trackStatus", {integration: new WebSocketLambdaIntegration("TrackStatusIntegration", onMessageHandler)})
+        const route = webSocketApi.addRoute("trackStatus", {integration: new WebSocketLambdaIntegration("TrackStatusIntegration", onMessageHandler)})
 
         const prodStage = new WebSocketStage(this, "dev", {
             webSocketApi: webSocketApi,
@@ -78,12 +78,17 @@ export class WebSocketApiStack extends Stack {
 
         new CfnOutput(this, 'WebSocketApiId', {
             value: webSocketApi.apiId,
-            description: 'WebSocket URL',
+            description: 'WebSocket ApiId',
         });
-
+        
         new CfnOutput(this, 'WebSocketApiName', {
             value: webSocketApi.webSocketApiName!,
-            description: 'WebSocket URL',
+            description: 'WebSocket webSocketApiName',
+        });
+
+        new CfnOutput(this, 'WebSocketRouteId', {
+            value: route.routeId,
+            description: 'WebSocket RouteId',
         });
     }
 }
