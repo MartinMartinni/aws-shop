@@ -9,10 +9,17 @@ export async function postProduct(event: APIGatewayProxyEvent, repository:  Prod
 
     const body = event.body;
 
-    const product = parseJSON(body || "{}") as ProductEntity;
-    validateAsProductsEntry(product);
+    const productObj = parseJSON(body || "{}");
+    if (Array.isArray(productObj)) {
+        productObj as ProductEntity[];
+        productObj.forEach((pr: ProductEntity) => validateAsProductsEntry(pr));
+        const result = await repository.saveAll(productObj);
+        return getResponseFor(201, result);
+    }
 
-    const result = repository.save(product);
+    productObj as ProductEntity;
+    validateAsProductsEntry(productObj);
 
+    const result = repository.save(productObj);
     return getResponseFor(201, result);
 }

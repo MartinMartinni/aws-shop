@@ -5,7 +5,9 @@ import {
     GetItemCommand,
     PutItemCommand,
     ScanCommand,
-    AttributeValue, UpdateItemCommand,
+    AttributeValue,
+    UpdateItemCommand,
+    BatchWriteItemCommand
 } from "@aws-sdk/client-dynamodb";
 import {marshall, unmarshall} from "@aws-sdk/util-dynamodb";
 import {createRandomId} from "../utils/Utils";
@@ -85,6 +87,26 @@ export abstract class AbstractDynamoDBRepository<T extends DynamoDBEntity> {
                 }
             }
         }));
+    }
+
+    async deleteByIds(ids: string[]) {
+        const deleteRequests = ids.map(id => ({
+            DeleteRequest: {
+              Key: {
+                id: {
+                    S: id
+                },
+              },
+            },
+        }));
+        
+        const params = {
+            RequestItems: {
+                [this.tableName]: deleteRequests,
+            },
+        };
+
+        await this.ddbClient.send(new BatchWriteItemCommand(params));
     }
 
     async updateFields(id: string, updateAttributes: {[key: string]: any}) {

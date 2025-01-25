@@ -68,4 +68,4 @@ const webSocketApiStack = new WebSocketApiStack(app, "WebSocketApiStack", {
     orderStatusResultLambda: orderStatusResultLambdaStack.lambdaFunction
 });
 
-const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");
+// const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");

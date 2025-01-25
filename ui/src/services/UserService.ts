@@ -1,5 +1,5 @@
 import {User} from "../model/Models.ts";
-
+import {HttpError} from "../../src/exceptions/Exceptions.ts"
 import {RestApiStack} from "../../cdk-outputs.json";
 import {AuthService} from "./AuthService.ts";
 import {HttpService} from "./HttpService.ts";
@@ -15,15 +15,18 @@ export class UserService {
     }
 
 
-    public async getUser() : Promise<User | undefined> {
+    public async getUser(token: string) : Promise<User | undefined> {
         try {
             console.log("this.authService.getUserName()", this.authService.getUserName());
             const result = await fetch(`${userUrl}?email=${this.authService.getUserName()}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": AuthService.jwtToken!
+                    "Authorization": token
                 }
             });
+            if (result.status >= 400)
+                throw new HttpError(result);
+            
             this.user = await result.json() as User;
         } catch (e) {
             console.error("Error: ", e);

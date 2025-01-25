@@ -41,7 +41,8 @@ export class AuthStack extends Stack {
         const customAttributes: { [key: string]: ICustomAttribute } = {
             "role": new StringAttribute({ mutable: true }),
             "amountOfMoney": new StringAttribute({ mutable: true }),
-            "img": new StringAttribute({ mutable: true })
+            "img": new StringAttribute({ mutable: true }),
+            "domain": new StringAttribute({ mutable: true })
         };
 
         this.userPool = new UserPool(this, "UserPool", {

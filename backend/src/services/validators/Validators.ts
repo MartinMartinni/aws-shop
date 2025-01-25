@@ -22,7 +22,7 @@ export function validateAsProductsEntry(val: ProductEntity) {
             path: "price"
         });
     }
-    if (!val.quantity) {
+    if (val.quantity != 0 && !val.quantity) {
         missingFields.push({
             name: "quantity",
             path: "quantity"
@@ -138,15 +138,15 @@ export function validateAsPlaceOrderEntry(val: PlaceOrderEntry) {
 }
 
 export function validateAsUserCreditBankAccountEntry(val: UserCreditBankAccountEntry) {
-    if (!val.amountOfMoney) {
-        throw new RequiredFieldRequestValidationError([], [{
+    if (val.amountOfMoney == 0) {
+        throw new RequestValidationError("Cannot deposit/Withdraw 0", [], [{
             name: "amountOfMoney",
             path: "amountOfMoney"
         }]);
     }
-
-    if (val.amountOfMoney == 0) {
-        throw new RequestValidationError("Cannot deposit/Withdraw 0", [], [{
+    
+    if (!val.amountOfMoney) {
+        throw new RequiredFieldRequestValidationError([], [{
             name: "amountOfMoney",
             path: "amountOfMoney"
         }]);
