@@ -9,7 +9,8 @@
     "cdk": "cdk",
     "deploy-all": "cdk deploy --all --require-approval never --outputs-file ./../ui/cdk-outputs.json",
     "deploy-ui": "cdk deploy UiDeploymentStack --require-approval never --outputs-file ./cdk-outputs.json",
-    "destroy-all": "cdk destroy UserStack/UserPostConfirmationTriggerLambdaStack/UserPostConfirmationTriggerUpdateUserPoolLambdaStack OrderStatusResultLambdaStack AuthStack && cdk destroy --all"
+    "destroy-all": "cdk destroy UserStack/UserPostConfirmationTriggerLambdaStack/UserPostConfirmationTriggerUpdateUserPoolLambdaStack OrderStatusResultLambdaStack AuthStack && cdk destroy --all",
+    "deploy-cicd": "cdk deploy CICDPipelinesStack --require-approval never"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",

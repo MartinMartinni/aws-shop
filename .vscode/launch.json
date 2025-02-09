@@ -10,7 +10,7 @@
             "name": "Run Jest Tests (TypeScript)",
             "runtimeArgs": ["-r", "ts-node/register"],
             "program": "${workspaceFolder}/ui/node_modules/jest/bin/jest.js",
-            "args": ["--runInBand", "--detectOpenHandles", "C:/Users/mjendrasik/cdk-projects/aws-shop/ui/test/placeOrderIntegrationTests.test.tsx"],
+            "args": ["--runInBand", "--detectOpenHandles", "/ui/test/placeOrderIntegrationTests.test.tsx"],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "cwd": "${workspaceFolder}/ui/test/",

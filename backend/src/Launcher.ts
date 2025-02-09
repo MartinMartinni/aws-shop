@@ -15,6 +15,10 @@ import {ProductStack} from "./infra/stack/product/ProductStack";
 import {InitializerDataLambdaStack} from "./infra/stack/init/InitializerDataLambdaStack";
 import {UiDeploymentStack} from "./infra/stack/UiDeploymentStack";
 
+import {CICDPipelinesStack} from "./infra/stack/CICDPipelinesStack";
+
+
+
 const app = new cdk.App();
 const finderPhotosBucket = new FinderPhotosBucket(app, "PhotoBucket");
 const authStack = new AuthStack(app, "AuthStack", {
@@ -68,4 +72,6 @@ const webSocketApiStack = new WebSocketApiStack(app, "WebSocketApiStack", {
     orderStatusResultLambda: orderStatusResultLambdaStack.lambdaFunction
 });
 
-// const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");
+const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");
+
+const cicdPipelinesStack = new CICDPipelinesStack(app, "CICDPipelinesStack");
