@@ -35,7 +35,7 @@ const delayService = (): { promise: (ms: number) => Promise<void>; cancel: () =>
     });
   
     const cancel = () => {
-      clearTimeout(timeoutId); // Clear the timeout
+      clearTimeout(timeoutId);
       console.log("Delay time has passed: ", Date.now() - time);
     };
   
@@ -224,7 +224,6 @@ describe("WebSocket API Integration Test", () => {
             expect(data.status).toEqual(OrderStatus.COMPLETED);
             expect(data.executionName).toEqual(executionName);
             onmessageCompleted = true;
-            
             delay.cancel();
         };
 
