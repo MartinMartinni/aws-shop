@@ -26,7 +26,6 @@ export async function getOrders(event: APIGatewayProxyEvent, repository:  OrderD
                     queryConditions[prop] = prop === "id" ? value : value;
                 }
 
-                // const orderResult = await dbConn.getRepository(Orders).findBy(queryConditions);
                 const orderResult = await repository.findAllBy({AND: queryConditions, IN: {}});
 
                 console.log("await repository.findAllBy({AND: queryConditions, IN: {}}): ", orderResult);

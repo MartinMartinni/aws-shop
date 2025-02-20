@@ -35,7 +35,7 @@ export interface ProductEntity extends DynamoDBEntity {
     price: number,
     quantity: number
 }
-//
+
 export interface OrderEntity extends DynamoDBEntity {
     userId: string;
     orderStatus: OrderStatus;
@@ -43,7 +43,7 @@ export interface OrderEntity extends DynamoDBEntity {
     items: OrderItemsEntity[];
     address: AddressEntity;
 }
-//
+
 export interface OrderItemsEntity extends DynamoDBEntity {
     productId: string;
     productName: string;
@@ -52,7 +52,7 @@ export interface OrderItemsEntity extends DynamoDBEntity {
     price: number;
     subTotal: number;
 }
-//
+
 export interface AddressEntity extends DynamoDBEntity {
     country: string;
     city: string;
