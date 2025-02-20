@@ -54,7 +54,6 @@ export async function getOrders(event: APIGatewayProxyEvent, repository:  OrderD
                     orderStatus: [OrderStatus.PENDING, OrderStatus.FAILURE]
                 }
             });
-            //todo: in query
 
             console.log("orders active: ", orders);
 
