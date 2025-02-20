@@ -1,21 +1,21 @@
 import {RemovalPolicy, StackProps} from "aws-cdk-lib";
-import {AbstractLambdaStepFunctionCaseStack} from "../../AbstractLambdaStepFunctionCaseStack";
+import {AbstractOrderFinalizationStepFunctionCaseStack} from "../../../AbstractOrderFinalizationStepFunctionCaseStack";
 import {Construct} from "constructs";
 import {Effect, PolicyStatement} from "aws-cdk-lib/aws-iam";
 import {AttributeType, ITable, Table} from "aws-cdk-lib/aws-dynamodb";
 import {join} from "path";
-import {getSuffixFromStack} from "../../../utils/Utils";
-import {RdsConfig} from "../../../../../../docker/db-init/RdsInitStack";
+import {getSuffixFromStack} from "../../../../utils/Utils";
+import {RdsConfig} from "../../../../../../../docker/db-init/RdsInitStack";
 import {SubnetType} from "aws-cdk-lib/aws-ec2";
 
-export interface OrderFinalizationStepFunctionCaseStackProps extends StackProps {
+export interface OrderFinalizationStepFunctionCaseStackRDSProps extends StackProps {
     rdsConfig: RdsConfig
 }
 
-export class OrderFinalizationStepFunctionCaseStack extends AbstractLambdaStepFunctionCaseStack {
+export class OrderFinalizationStepFunctionCaseRDSStack extends AbstractOrderFinalizationStepFunctionCaseStack {
 
     readonly connectionsTable: ITable;
-    constructor(scope: Construct, id: string, props: OrderFinalizationStepFunctionCaseStackProps) {
+    constructor(scope: Construct, id: string, props: OrderFinalizationStepFunctionCaseStackRDSProps) {
         super(scope, id, props);
 
         const suffix = getSuffixFromStack(this);
@@ -30,8 +30,8 @@ export class OrderFinalizationStepFunctionCaseStack extends AbstractLambdaStepFu
         });
 
         this.lambdaFunction = this.createLambdaFunction(id, {
-            functionName: `order-finalization-case-${suffix}`,
-            entry: (join(__dirname, "..", "..", "..", "..", "..", "services", "step-function", "order", "downstream", "finalization", "handler.ts")),
+            functionName: `order-finalization-case-rds-${suffix}`,
+            entry: (join(process.cwd(), "src", "services", "step-function", "order", "downstream", "finalization", "rds", "handler.ts")),
             environment: {
                 TABLE_CONNECTIONS_NAME: this.connectionsTable.tableName,
                 DB_SECRET_ARN: props.rdsConfig.dbServer.secret?.secretArn || "",

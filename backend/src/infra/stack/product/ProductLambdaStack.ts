@@ -24,7 +24,7 @@ export class ProductLambdaStack extends Stack {
             functionName: `product-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: 'handler',
-            entry: (join(__dirname, '..', '..', '..', 'services', 'product', 'handler.ts')),
+            entry: (join(process.cwd(), "src", 'services', 'product', 'handler.ts')),
             environment: {
                 TABLE_PRODUCTS_NAME: props.productTable.tableName
             },

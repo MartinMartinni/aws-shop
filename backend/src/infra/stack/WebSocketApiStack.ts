@@ -6,14 +6,12 @@ import {Effect, PolicyStatement} from "aws-cdk-lib/aws-iam";
 import {WebSocketApi, WebSocketStage} from "@aws-cdk/aws-apigatewayv2-alpha";
 import {WebSocketLambdaIntegration} from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 import {Construct} from "constructs";
-import {
-    OrderFinalizationStepFunctionCaseStack
-} from "./step-function/order/downstream/OrderFinalizationStepFunctionCaseStack";
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import { AbstractOrderFinalizationStepFunctionCaseStack } from "./step-function/AbstractOrderFinalizationStepFunctionCaseStack";
 
 
 export interface WebSocketApiStackProps extends StackProps {
-    orderFinalizationStack: OrderFinalizationStepFunctionCaseStack
+    orderFinalizationStack: AbstractOrderFinalizationStepFunctionCaseStack
     orderStatusResultLambda: lambda.Function
 }
 

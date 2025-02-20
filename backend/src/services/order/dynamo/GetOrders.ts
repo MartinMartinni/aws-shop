@@ -1,11 +1,11 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from "aws-lambda";
-import {Database} from "../component/Database";
 import {Connection} from "typeorm";
-import {Orders, OrderStatus} from "../entity/sql/Orders";
-import {NotFoundError, RequiredFieldRequestValidationError} from "../exception/Exceptions";
-import {getResponseFor} from "../utils/HttpUtils";
+import {NotFoundError, RequiredFieldRequestValidationError} from "../../exception/Exceptions";
+import {getResponseFor} from "../../utils/HttpUtils";
+import {OrderDynamoDBRepository} from "../../repository/OrderDynamoDBRepository";
+import {OrderStatus} from "../../model/Models";
 
-export async function getOrders(event: APIGatewayProxyEvent, database: Database): Promise<APIGatewayProxyResult> {
+export async function getOrders(event: APIGatewayProxyEvent, repository:  OrderDynamoDBRepository): Promise<APIGatewayProxyResult> {
 
     let dbConn: Connection;
     try {
@@ -18,16 +18,17 @@ export async function getOrders(event: APIGatewayProxyEvent, database: Database)
 
             if (existingProperties.length > 0) {
                 console.log("open db connection");
-                dbConn = await database.getConnection();
 
                 const queryConditions: { [key: string]: string | number } = {};
 
                 for (const prop of existingProperties) {
                     const value = queryStringParameters[prop]!;
-                    queryConditions[prop] = prop === "id" ? parseInt(value) : value;
+                    queryConditions[prop] = prop === "id" ? value : value;
                 }
 
-                const orderResult = await dbConn.getRepository(Orders).findBy(queryConditions);
+                const orderResult = await repository.findAllBy({AND: queryConditions, IN: {}});
+
+                console.log("await repository.findAllBy({AND: queryConditions, IN: {}}): ", orderResult);
 
                 if (orderResult) {
                     return getResponseFor(200, orderResult);
@@ -43,14 +44,15 @@ export async function getOrders(event: APIGatewayProxyEvent, database: Database)
         }
 
         if (event.pathParameters && event.pathParameters["userId"] && event.path.includes("/active")) {
-            dbConn = await database.getConnection();
 
             const userId = event.pathParameters["userId"];
-            const orders = await dbConn.getRepository(Orders).find({
-                where: [
-                    { userId: userId, orderStatus: OrderStatus.PENDING },
-                    { userId: userId, orderStatus: OrderStatus.FAILURE }
-                ]
+            const orders = await repository.findAllBy({
+                AND: {
+                    userId: userId
+                },
+                IN: {
+                    orderStatus: [OrderStatus.PENDING, OrderStatus.FAILURE]
+                }
             });
 
             console.log("orders active: ", orders);
@@ -58,9 +60,7 @@ export async function getOrders(event: APIGatewayProxyEvent, database: Database)
             return getResponseFor(200, orders);
         }
 
-        dbConn = await database.getConnection();
-
-        const orderResult = await dbConn.getRepository(Orders).find();
+        const orderResult = await repository.findAll();
 
         return getResponseFor(200, orderResult);
     } catch (e) {

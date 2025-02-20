@@ -4,8 +4,7 @@ import * as cdk from "aws-cdk-lib";
 import { ApiStack as ApiStack } from "./infra/stack/ApiStack";
 import {AuthStack} from "./infra/stack/AuthStack";
 import {FinderPhotosBucket} from "./infra/stack/FinderPhotosBucket";
-import {OrderStack} from "./infra/stack/order/OrderStack";
-import {RdsInitStack} from "../docker/db-init/RdsInitStack";
+import {RdsInitStack, RdsConfig} from "../docker/db-init/RdsInitStack";
 import {StepFunctionOrderWorkflowStack} from "./infra/stack/step-function/StepFunctionOrderWorkflowStack";
 import {OrderStatusEventBridgeStack} from "./infra/stack/order/OrderStatusEventBridgeStack";
 import {OrderStatusResultLambdaStack} from "./infra/stack/order/OrderStatusResultLambdaStack";
@@ -14,10 +13,16 @@ import {UserStack} from "./infra/stack/user/UserStack";
 import {ProductStack} from "./infra/stack/product/ProductStack";
 import {InitializerDataLambdaStack} from "./infra/stack/init/InitializerDataLambdaStack";
 import {UiDeploymentStack} from "./infra/stack/UiDeploymentStack";
-
+import {OrderLambdaRDSStack} from "./infra/stack/order/OrderLambdaRDSStack";
+import {OrderLambdaDynamoStack} from "./infra/stack/order/OrderLambdaDynamoStack";
 import {CICDPipelinesStack} from "./infra/stack/CICDPipelinesStack";
 
+import {AbstractOrdeStack} from "./infra/stack/order/AbstractOrdeStack";
+import { ITable } from "aws-cdk-lib/aws-dynamodb";
 
+const ordersDBType = process.env.ORDERS_DB_TYPE?.toUpperCase() || "DYNAMO";
+
+console.log("process.env.ORDERS_DB_TYPE?.toUpperCase(): ", process.env.ORDERS_DB_TYPE?.toUpperCase());
 
 const app = new cdk.App();
 const finderPhotosBucket = new FinderPhotosBucket(app, "PhotoBucket");
@@ -32,11 +37,19 @@ const initializerDataLambdaStack = new InitializerDataLambdaStack(app, "Initiali
     photoBucket: finderPhotosBucket.photoBucket
 });
 
-const rdsInitStack = new RdsInitStack(app, "RdsInitStack");
-
-const orderStack = new OrderStack(app, "OrderStack", {
-    rdsConfig: rdsInitStack.rdsConfig
-});
+let rdsInitStack = {} as RdsInitStack;
+let orderStack = {} as AbstractOrdeStack;
+let orderTable: ITable | undefined;
+if (ordersDBType === "RDS") {
+    rdsInitStack = new RdsInitStack(app, "RdsInitStack");
+    orderStack = new OrderLambdaRDSStack(app, "OrderLambdaRDSStack", {
+        rdsConfig: rdsInitStack.rdsConfig
+    });
+} else {
+    const orderLambdaStack = new OrderLambdaDynamoStack(app, "OrderLambdaDynamoStack") as OrderLambdaDynamoStack;
+    orderTable = orderLambdaStack.orderTable;
+    orderStack = orderLambdaStack;
+}
 
 const userStack = new UserStack(app, "UserStack", {
     userPool: authStack.userPool
@@ -50,7 +63,8 @@ const stepFunctionOrderWorkflowStack = new StepFunctionOrderWorkflowStack(app, "
     userTable: userStack.userTable,
     userBankAccountHistoryTable: userStack.userBankAccountHistoryTable,
     eventBus: eventBridgeStack.eventBus,
-    rdsConfig: rdsInitStack.rdsConfig
+    rdsConfig: rdsInitStack.rdsConfig,
+    orderTable: orderTable
 });
 
 const orderStatusResultLambdaStack = new OrderStatusResultLambdaStack(app, "OrderStatusResultLambdaStack", {
@@ -61,7 +75,7 @@ const orderStatusResultLambdaStack = new OrderStatusResultLambdaStack(app, "Orde
 const apiStack = new ApiStack(app, "RestApiStack", {
     productLambdaIntegration: productStack.productLambdaIntegration,
     userLambdaIntegration: userStack.userLambdaIntegration,
-    orderLambdaIntegration: orderStack.orderLambdaIntegration,
+    orderLambdaIntegration: orderStack.getOrderLambdaIntegration(),
     userPool: authStack.userPool,
     userCreditBankAccountLambdaIntegration: userStack.userCreditBankAccountLambdaIntegration,
     stateMachine: stepFunctionOrderWorkflowStack.stateMachine

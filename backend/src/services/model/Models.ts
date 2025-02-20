@@ -1,5 +1,3 @@
-import {OrderStatus} from "../entity/sql/Orders";
-
 export enum OrderWorkflowType {
     REVERT_WAREHOUSE_SUCCESS = "REVERT_WAREHOUSE_SUCCESS",
     PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
@@ -18,6 +16,12 @@ export enum TransferType {
 }
 export interface UserCreditBankAccountEntry {
     amountOfMoney: number
+}
+
+export enum OrderStatus {
+    PENDING = "PENDING",
+    COMPLETED = "COMPLETED",
+    FAILURE = "FAILURE",
 }
 
 export interface OrderEntry {

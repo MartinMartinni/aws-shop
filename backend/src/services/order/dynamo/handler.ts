@@ -1,13 +1,14 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult, Context} from "aws-lambda";
 import {getOrders} from "./GetOrders";
 import {postOrder} from "./PostOrder";
-import {Database} from "../component/Database";
 import {
     addCorsHeader,
     getErrorResponse,
     getResponseFor405,
-} from "../utils/HttpUtils";
+} from "../../utils/HttpUtils";
+import { OrderDynamoDBRepository } from "../../repository/OrderDynamoDBRepository";
 
+const repository = new OrderDynamoDBRepository;
 async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<APIGatewayProxyResult> {
 
     let response: APIGatewayProxyResult;
@@ -18,14 +19,13 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
             "- queryParameters: " + JSON.stringify(event.queryStringParameters) + "\n" +
             "- body: " + JSON.stringify(event.body));
 
-        const database = new Database()
 
         switch (event.httpMethod) {
             case "GET":
-                response = await getOrders(event, database);
+                response = await getOrders(event, repository);
                 break;
             case "POST":
-                response = await postOrder(event, database);
+                response = await postOrder(event, repository);
                 break;
             default:
                 response = getResponseFor405(event.httpMethod);

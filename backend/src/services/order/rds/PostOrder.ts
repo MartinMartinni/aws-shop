@@ -1,12 +1,12 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from "aws-lambda";
-import {parseJSON} from "../utils/Utils";
-import {validateAsOrdersEntry} from "../validators/Validators";
-import {OrderEntry} from "../model/Models";
-import {Database} from "../component/Database";
+import {parseJSON} from "../../utils/Utils";
+import {validateAsOrdersEntry} from "../../validators/Validators";
+import {OrderEntry} from "../../model/Models";
+import {Database} from "../../component/Database";
 import {Connection} from "typeorm";
-import {Orders} from "../entity/sql/Orders";
-import {OrderItems} from "../entity/sql/OrderItems";
-import {getResponseFor} from "../utils/HttpUtils";
+import {Orders} from "../../entity/sql/Orders";
+import {OrderItems} from "../../entity/sql/OrderItems";
+import {getResponseFor} from "../../utils/HttpUtils";
 
 export async function postOrder(event: APIGatewayProxyEvent, database: Database): Promise<APIGatewayProxyResult> {
 

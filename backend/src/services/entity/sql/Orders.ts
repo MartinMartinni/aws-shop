@@ -1,12 +1,8 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
 import {OrderItems} from "./OrderItems";
 import {Address} from "./Address";
+import {OrderStatus} from "../../model/Models";
 
-export enum OrderStatus {
-    PENDING = "PENDING",
-    COMPLETED = "COMPLETED",
-    FAILURE = "FAILURE",
-}
 
 @Entity()
 export class Orders {

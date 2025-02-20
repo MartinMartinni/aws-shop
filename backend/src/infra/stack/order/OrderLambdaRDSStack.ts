@@ -1,4 +1,4 @@
-import {Duration, Stack, StackProps} from "aws-cdk-lib";
+import {Duration, StackProps} from "aws-cdk-lib";
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import {Construct} from "constructs";
 import {Runtime, Tracing} from "aws-cdk-lib/aws-lambda";
@@ -8,24 +8,24 @@ import {LambdaIntegration} from "aws-cdk-lib/aws-apigateway";
 import {Port, SubnetType} from "aws-cdk-lib/aws-ec2";
 import {RdsConfig} from "../../../../docker/db-init/RdsInitStack";
 import {getSuffixFromStack} from "../utils/Utils";
+import {AbstractOrdeStack} from "./AbstractOrdeStack";
 
-export interface LambdaStackIntegration extends StackProps {
+export interface OrderLambdaRDSStackProps extends StackProps {
     rdsConfig: RdsConfig
 }
 
-export class OrderLambdaStack extends Stack {
+export class OrderLambdaRDSStack extends AbstractOrdeStack {
 
-    public readonly ordersLambdaIntegration: LambdaIntegration;
-    constructor(scope: Construct, id: string, props: LambdaStackIntegration) {
+    constructor(scope: Construct, id: string, props: OrderLambdaRDSStackProps) {
         super(scope, id, props);
 
         const suffix = getSuffixFromStack(this);
 
-        const ordersLambda = new NodejsFunction(this, "OrderLambda", {
+        const ordersLambda = new NodejsFunction(this, "OrderLambdaRDS", {
             functionName: `order-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
-            entry: (join(__dirname, "..", "..", "..", "services" , "order", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services" , "order", "rds", "handler.ts")),
             environment: {
                 DB_SECRET_ARN: props.rdsConfig.dbServer.secret?.secretArn || "",
             },
@@ -56,6 +56,6 @@ export class OrderLambdaStack extends Stack {
         props.rdsConfig.dbServer.connections.allowFrom(ordersLambda, Port.tcp(3306))
         props.rdsConfig.dbServer.secret?.grantRead(ordersLambda);
 
-        this.ordersLambdaIntegration = new LambdaIntegration(ordersLambda);
+        this.orderLambdaIntegration = new LambdaIntegration(ordersLambda);
     }
 }

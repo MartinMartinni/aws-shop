@@ -25,7 +25,7 @@ export class InitializerDataLambdaStack extends Stack {
             functionName: `initializer-data-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
-            entry: (join(__dirname, "..", "..", "..", "services", "init", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services", "init", "handler.ts")),
             environment: {
                 TABLE_PRODUCTS_NAME: props.productTable.tableName,
                 BUCKET_PHOTO_NAME: props.photoBucket.bucketName

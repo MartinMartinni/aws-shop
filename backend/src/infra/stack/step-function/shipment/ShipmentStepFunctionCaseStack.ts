@@ -26,7 +26,7 @@ export class ShipmentStepFunctionCaseStack extends AbstractLambdaStepFunctionCas
 
         this.lambdaFunction = this.createLambdaFunction(id, {
             functionName: `shipment-case-${suffix}`,
-            entry: (join(__dirname, "..", "..", "..", "..", "services", "step-function", "shipment", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services", "step-function", "shipment", "handler.ts")),
             environment: {
                 TABLE_SHIPMENTS_NAME: this.shipmentTable.tableName
             }
