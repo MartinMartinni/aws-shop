@@ -20,7 +20,7 @@ export class WarehouseStepFunctionCaseStack extends AbstractLambdaStepFunctionCa
 
         this.lambdaFunction = this.createLambdaFunction(id, {
             functionName: `warehouse-case-${suffix}`,
-            entry: (join(__dirname, "..", "..", "..", "..", "..", "services", "step-function", "warehouse", "downstream", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services", "step-function", "warehouse", "downstream", "handler.ts")),
             environment: {
                 TABLE_PRODUCTS_NAME: props.productTable.tableName,
                 TABLE_PRODUCTS_SOLD_NAME: props.productSoldTable.tableName,

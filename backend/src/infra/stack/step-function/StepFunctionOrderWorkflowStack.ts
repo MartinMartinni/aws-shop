@@ -12,13 +12,17 @@ import {
     StateMachine,
     TaskInput
 } from "aws-cdk-lib/aws-stepfunctions";
-import {OrderFinalizationStepFunctionCaseStack} from "./order/downstream/OrderFinalizationStepFunctionCaseStack";
-import {OrderStepFunctionCaseStack} from "./order/downstream/OrderStepFunctionCaseStack";
+import {OrderFinalizationStepFunctionCaseRDSStack} from "./order/downstream/rds/OrderFinalizationStepFunctionCaseRDSStack";
+import {OrderStepFunctionCaseRDSStack} from "./order/downstream/rds/OrderStepFunctionCaseRDSStack";
+import {OrderFinalizationStepFunctionCaseDynamoStack} from "./order/downstream/dynamo/OrderFinalizationStepFunctionCaseDynamoStack";
+import {OrderStepFunctionCaseDynamoStack} from "./order/downstream/dynamo/OrderStepFunctionCaseDynamoStack";
 import {ITable} from "aws-cdk-lib/aws-dynamodb";
 import {EventBridgePutEvents} from "aws-cdk-lib/aws-stepfunctions-tasks";
 import {EventBus} from "aws-cdk-lib/aws-events";
 import {OrderWorkflowType} from "../../../services/model/Models";
 import {RdsConfig} from "../../../../docker/db-init/RdsInitStack";
+import {AbstractLambdaStepFunctionCaseStack} from "./AbstractLambdaStepFunctionCaseStack";
+import {AbstractOrderFinalizationStepFunctionCaseStack} from "./AbstractOrderFinalizationStepFunctionCaseStack";
 
 interface StepFunctionOrderWorkflowStackProps extends StackProps {
     productTable: ITable
@@ -26,23 +30,42 @@ interface StepFunctionOrderWorkflowStackProps extends StackProps {
     userTable: ITable
     userBankAccountHistoryTable: ITable,
     eventBus: EventBus,
-    rdsConfig: RdsConfig
+    rdsConfig: RdsConfig | undefined,
+    orderTable: ITable | undefined
 }
 export class StepFunctionOrderWorkflowStack extends Stack {
 
     public readonly stateMachine: StateMachine;
-    public readonly orderFinalizationStack: OrderFinalizationStepFunctionCaseStack;
+    public readonly orderFinalizationStack: AbstractOrderFinalizationStepFunctionCaseStack;
+    
     constructor(scope: Construct, id: string, props: StepFunctionOrderWorkflowStackProps) {
         super(scope, id, props);
 
-        const orderStack = new OrderStepFunctionCaseStack(this, "OrderStepFunctionCaseStack", {
-            userTable: props.userTable,
-            productTable: props.productTable,
-            rdsConfig: props.rdsConfig
-        });
-        this.orderFinalizationStack = new OrderFinalizationStepFunctionCaseStack(this, "OrderFinalizationStepFunctionCaseStack", {
-            rdsConfig: props.rdsConfig
-        });
+        const ordersDBType = process.env.ORDERS_DB_TYPE?.toUpperCase() || "DYNAMO";
+
+        let orderStack: AbstractLambdaStepFunctionCaseStack;
+
+        if (ordersDBType === "RDS") {
+            orderStack = new OrderStepFunctionCaseRDSStack(this, "OrderStepFunctionCaseRDSStack", {
+                userTable: props.userTable,
+                productTable: props.productTable,
+                rdsConfig: props.rdsConfig!
+            });
+
+            this.orderFinalizationStack = new OrderFinalizationStepFunctionCaseRDSStack(this, "OrderFinalizationStepFunctionCaseRDSStack", {
+                rdsConfig: props.rdsConfig!
+            });
+        } else {
+            orderStack = new OrderStepFunctionCaseDynamoStack(this, "OrderStepFunctionCaseDynamoStack", {
+                userTable: props.userTable,
+                productTable: props.productTable,
+                orderTable: props.orderTable!
+            });
+
+            this.orderFinalizationStack = new OrderFinalizationStepFunctionCaseDynamoStack(this, "OrderFinalizationStepFunctionCaseDynamoStack", {
+                orderTable: props.orderTable!
+            });
+        }
 
         const warehouseStack = new WarehouseStepFunctionCaseStack(this, "WarehouseStepFunctionCaseStack", {
             productTable: props.productTable,

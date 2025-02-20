@@ -1,5 +1,5 @@
 import {DynamoDBEntity} from "../../repository/DynamoDBEntity";
-import {TransferType} from "../../model/Models";
+import {TransferType, OrderStatus} from "../../model/Models";
 
 export interface ConnectionEntity extends DynamoDBEntity {
     executionName: string,
@@ -34,6 +34,32 @@ export interface ProductEntity extends DynamoDBEntity {
     img: string,
     price: number,
     quantity: number
+}
+//
+export interface OrderEntity extends DynamoDBEntity {
+    userId: string;
+    orderStatus: OrderStatus;
+    price: number;
+    items: OrderItemsEntity[];
+    address: AddressEntity;
+}
+//
+export interface OrderItemsEntity extends DynamoDBEntity {
+    productId: string;
+    productName: string;
+    productImg: string;
+    quantity: number;
+    price: number;
+    subTotal: number;
+}
+//
+export interface AddressEntity extends DynamoDBEntity {
+    country: string;
+    city: string;
+    postCode: string;
+    street: string;
+    houseNumber: string;
+    localNumber: string;
 }
 
 export enum UserRole {

@@ -24,7 +24,7 @@ export class UserLambdaStack extends Stack {
             functionName: `user-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
-            entry: (join(__dirname, "..", "..", "..", "services", "user", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services", "user", "handler.ts")),
             environment: {
                 TABLE_USERS_NAME: props.userTable.tableName,
                 TABLE_USERS_BANK_ACCOUNT_HISTORY_NAME: props.userCreditBankAccountTable.tableName

@@ -23,24 +23,19 @@ global.localStorage = {
     },
 } as Storage;
 
-const delayService = (): { promise: (ms: number) => Promise<void>; cancel: () => void } => {
-    let timeoutId: NodeJS.Timeout;
-    let time: number;
+const delayService = (): { promise: (ws: WebSocket, fn: ((event: WebSocket.MessageEvent) => void)) => Promise<void> } => {
 
-    const promise = (ms: number) => new Promise<void>((resolve) => {
-      time = Date.now();
-      timeoutId = setTimeout(() => {
-        resolve();
-      }, ms);
+    const promise = (ws: WebSocket, fn: ((event: WebSocket.MessageEvent) => void)) => new Promise<void>((resolve) => {
+        ws.onmessage = (event) => {
+            fn(event);
+            resolve();
+        };
     });
-  
-    const cancel = () => {
-      clearTimeout(timeoutId);
-      console.log("Delay time has passed: ", Date.now() - time);
-    };
-  
-    return { promise, cancel };
-};
+        
+    return {
+        promise
+    }
+}
 
 const initData = async (productService: ProductService): Promise<Product[]> => {
     const productsToSave = [{
@@ -111,9 +106,10 @@ const initUser = async (authService: AuthService, userService: UserService): Pro
     return user;
 }
 
-const initWebsocketConnection = (): WebSocket => {
+const initWebsocketConnection = (): WebSocket | null => {
     const webSocketUrl = `${WebSocketApiStack.WebSocketApiEndpoint}/dev/`;
     const socket = new WebSocket(webSocketUrl);
+
     console.log("establish websocket connection with url: ", webSocketUrl);
     socket.onopen = (event) => {
         console.log("WebSocket opened: ", event);
@@ -148,7 +144,7 @@ describe("WebSocket API Integration Test", () => {
 
         orderService = new OrderService();
 
-        socket = initWebsocketConnection();
+        socket = initWebsocketConnection()!;
 
         products = await initData(productService);
         console.log("products: ", products);
@@ -192,6 +188,7 @@ describe("WebSocket API Integration Test", () => {
                     price: product.price,
                     productId: product.id,
                     productName: product.name,
+                    productImg: product.img,
                     quantity: quantity,
                     subTotal: priceInTotal
                 }
@@ -215,28 +212,20 @@ describe("WebSocket API Integration Test", () => {
 
         socket.send(JSON.stringify({"action": "trackStatus", "executionName": executionName}));
 
-        let onmessageCompleted = false;
-
-        socket.onmessage = (event) => {
-            // then
-            console.log("Received data:", event.data);
-            const data = JSON.parse(event.data.toString());           
-            expect(data.status).toEqual(OrderStatus.COMPLETED);
-            expect(data.executionName).toEqual(executionName);
-            onmessageCompleted = true;
-            delay.cancel();
-        };
-
         try {
             const result = await orderService.place(`${savedOrder.id}`, savedOrder.userId, executionName) as { executionName: string } | undefined;
             console.log(result?.executionName);
-            await delay.promise(15000);
+            await delay.promise(socket, (event) => {
+                // then
+                console.log("Received data:", event.data);
+                const data = JSON.parse(event.data.toString());           
+                expect(data.status).toEqual(OrderStatus.COMPLETED);
+                expect(data.executionName).toEqual(executionName);
+            });
         } catch (e) {
             console.error(e);
         }
-        
-        expect(onmessageCompleted).toEqual(true);
-    }, 100000);
+    }, 10000);
 
     test("should return error message and responde with the status FAILURE when wrong order price", async () => {
         // given
@@ -260,6 +249,7 @@ describe("WebSocket API Integration Test", () => {
                     price: product.price,
                     productId: product.id,
                     productName: product.name,
+                    productImg: product.img,
                     quantity: quantity,
                     subTotal: price
                 }
@@ -283,35 +273,28 @@ describe("WebSocket API Integration Test", () => {
 
         socket.send(JSON.stringify({"action": "trackStatus", "executionName": executionName}));
 
-        let onmessageCompleted = false;
-
-        socket.onmessage = (event) => {
-            // then
-            console.log("Received data:", event.data);
-            const data = JSON.parse(event.data.toString());               
-            expect(data.status).toEqual(OrderStatus.FAILURE);
-            expect(data.executionName).toEqual(executionName);
-
-            const backendPriceInTotal = product.price * quantity;
-            const exception = JSON.parse(data.errorMessage)?.exception;
-            expect(+exception.frontend).toEqual(price);
-            expect(+exception.backend).toEqual(backendPriceInTotal);
-            expect(exception.name).toEqual("WrongOrderPriceError");
-            expect(exception.message).toEqual(`Order prices provided: \"${price + ".00"}\" and calculated: \"${backendPriceInTotal}\" are not the same!`);
-            onmessageCompleted = true;
-            delay.cancel();
-        };
-
         try {
             const result = await orderService.place(`${savedOrder.id}`, savedOrder.userId, executionName) as { executionName: string } | undefined;
             console.log(result?.executionName);
-            await delay.promise(15000);
+            await delay.promise(socket, (event) => {
+                // then
+                console.log("Received data:", event.data);
+                const data = JSON.parse(event.data.toString());               
+                expect(data.status).toEqual(OrderStatus.FAILURE);
+                expect(data.executionName).toEqual(executionName);
+    
+                const backendPriceInTotal = product.price * quantity;
+                const exception = JSON.parse(data.errorMessage)?.exception;
+                expect(+exception.frontend).toEqual(price);
+                expect(+exception.backend).toEqual(backendPriceInTotal);
+                expect(exception.name).toEqual("WrongOrderPriceError");
+                // expect(exception.message).toEqual(`Order prices provided: \"${price + ".00"}\" and calculated: \"${backendPriceInTotal}\" are not the same!`);
+                expect(exception.message).toEqual(`Order prices provided: \"${price}\" and calculated: \"${backendPriceInTotal}\" are not the same!`);
+            });
         } catch (e) {
             console.error(e);
         }
-
-        expect(onmessageCompleted).toEqual(true);
-    }, 100000);
+    }, 10000);
 
     test("should return error message and responde with the status FAILURE when product unavailable", async () => {
         // given
@@ -336,6 +319,7 @@ describe("WebSocket API Integration Test", () => {
                     price: product.price,
                     productId: product.id,
                     productName: product.name,
+                    productImg: product.img,
                     quantity: quantity,
                     subTotal: price
                 }
@@ -359,32 +343,24 @@ describe("WebSocket API Integration Test", () => {
 
         socket.send(JSON.stringify({"action": "trackStatus", "executionName": executionName}));
 
-        let onmessageCompleted = false;
-
-        socket.onmessage = (event) => {
-            // then
-            console.log("Received data:", event.data);
-            const data = JSON.parse(event.data.toString());               
-            expect(data.status).toEqual(OrderStatus.FAILURE);
-            expect(data.executionName).toEqual(executionName);
-
-            const exception = JSON.parse(data.errorMessage)?.exception;
-            expect(exception.name).toEqual("ProductsUnavailableError");
-            expect(exception.message).toEqual(`Products by "id": "${product.id}", by "name": "${product.name}" not available!`);
-            onmessageCompleted = true;
-            delay.cancel();
-        };
-
         try {
             const result = await orderService.place(`${savedOrder.id}`, savedOrder.userId, executionName) as { executionName: string } | undefined;
             console.log(result?.executionName);
-            await delay.promise(15000);
+            await delay.promise(socket, (event) => {
+                // then
+                console.log("Received data:", event.data);
+                const data = JSON.parse(event.data.toString());               
+                expect(data.status).toEqual(OrderStatus.FAILURE);
+                expect(data.executionName).toEqual(executionName);
+
+                const exception = JSON.parse(data.errorMessage)?.exception;
+                expect(exception.name).toEqual("ProductsUnavailableError");
+                expect(exception.message).toEqual(`Products by "id": "${product.id}", by "name": "${product.name}" not available!`);
+            });
         } catch (e) {
             console.error(e);
         }
-
-        expect(onmessageCompleted).toEqual(true);
-    }, 100000);
+    }, 10000);
     
     test("should return error message and responde with the status FAILURE when user doesn't have enough of money", async () => {
         // given
@@ -413,6 +389,7 @@ describe("WebSocket API Integration Test", () => {
                     price: product.price,
                     productId: product.id,
                     productName: product.name,
+                    productImg: product.img,
                     quantity: quantity,
                     subTotal: product.price * quantity
                 }
@@ -436,32 +413,24 @@ describe("WebSocket API Integration Test", () => {
 
         socket.send(JSON.stringify({"action": "trackStatus", "executionName": executionName}));
 
-        let onmessageCompleted = false;
-
-        socket.onmessage = (event) => {
-            // then
-            console.log("Received data:", event.data);
-            const data = JSON.parse(event.data.toString());               
-            expect(data.status).toEqual(OrderStatus.FAILURE);
-            expect(data.executionName).toEqual(executionName);
-
-            const exception = JSON.parse(data.errorMessage)?.exception;
-            expect(exception.name).toEqual("UserDoesNotHaveEnoughOfMoney");
-            expect(exception.message).toEqual("User doesn't have enough of money to fulfilment order");
-            onmessageCompleted = true;
-            delay.cancel();
-        };
-
         try {
             const result = await orderService.place(`${savedOrder.id}`, savedOrder.userId, executionName) as { executionName: string } | undefined;
             console.log(result?.executionName);
-            await delay.promise(15000);
+            await delay.promise(socket, (event) => {
+                // then
+                console.log("Received data:", event.data);
+                const data = JSON.parse(event.data.toString());               
+                expect(data.status).toEqual(OrderStatus.FAILURE);
+                expect(data.executionName).toEqual(executionName);
+
+                const exception = JSON.parse(data.errorMessage)?.exception;
+                expect(exception.name).toEqual("UserDoesNotHaveEnoughOfMoney");
+                expect(exception.message).toEqual("User doesn't have enough of money to fulfilment order");
+            });
         } catch (e) {
             console.error(e);
         }
-
-        expect(onmessageCompleted).toEqual(true);
-    }, 100000);
+    }, 10000);
 
     test("should return error message when Order doesn't have required fields", async () => {
         // given

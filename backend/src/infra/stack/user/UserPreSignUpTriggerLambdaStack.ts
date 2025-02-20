@@ -23,7 +23,7 @@ export class UserPreSignUpTriggerLambdaStack extends Stack {
             functionName: `user-pre-sign-up-trigger-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
-            entry: (join(__dirname, "..", "..", "..", "services", "user", "pre-sign-up-trigger", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services", "user", "pre-sign-up-trigger", "handler.ts")),
             environment: {},
             tracing: Tracing.ACTIVE,
             timeout: Duration.minutes(1)

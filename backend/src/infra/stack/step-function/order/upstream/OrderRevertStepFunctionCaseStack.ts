@@ -10,10 +10,10 @@ export class OrderRevertStepFunctionCaseStack extends AbstractLambdaStepFunction
 
         const suffix = getSuffixFromStack(this);
 
-        super.lambdaInvoke = super.createLambdaInvoke(id, {
-            lambdaFunction: super.createLambdaFunction(id, {
+        this.lambdaInvoke = this.createLambdaInvoke(id, {
+            lambdaFunction: this.createLambdaFunction(id, {
                 functionName: `order-revert-case-${suffix}`,
-                entry: (join(__dirname, "..", "..", "..", "..", "..", "services", "step-function", "order", "upstream", "handler.ts"))
+                entry: (join(process.cwd(), "src", "services", "step-function", "order", "upstream", "handler.ts"))
             })
         });
     }

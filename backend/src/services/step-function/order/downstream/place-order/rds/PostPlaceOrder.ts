@@ -1,13 +1,13 @@
-import {APIGatewayProxyEvent, APIGatewayProxyResult} from "aws-lambda";
-import {parseJSON} from "../../../../utils/Utils";
-import {validateAsPlaceOrderEntry} from "../../../../validators/Validators";
-import {PlaceOrderEntry} from "../../../../model/Models";
-import {Orders} from "../../../../entity/sql/Orders";
+import {APIGatewayProxyResult} from "aws-lambda";
+import {parseJSON} from "../../../../../utils/Utils";
+import {validateAsPlaceOrderEntry} from "../../../../../validators/Validators";
+import {PlaceOrderEntry} from "../../../../../model/Models";
+import {Orders} from "../../../../../entity/sql/Orders";
 import {Connection} from "typeorm";
-import {Database} from "../../../../component/Database";
-import {NotFoundError} from "../../../../exception/Exceptions";
-import {getResponseFor} from "../../../../utils/HttpUtils";
-import {APIGatewayProxyCustomEvent} from "../../../../model/HttpModels";
+import {Database} from "../../../../../component/Database";
+import {NotFoundError} from "../../../../../exception/Exceptions";
+import {getResponseFor} from "../../../../../utils/HttpUtils";
+import {APIGatewayProxyCustomEvent} from "../../../../../model/HttpModels";
 
 export async function postPlaceOrder(event: APIGatewayProxyCustomEvent, database: Database): Promise<APIGatewayProxyResult> {
 

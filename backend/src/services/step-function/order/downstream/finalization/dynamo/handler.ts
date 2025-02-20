@@ -1,14 +1,14 @@
-import {Database} from "../../../../component/Database";
-import {Orders, OrderStatus} from "../../../../entity/sql/Orders";
+import {OrderDynamoDBRepository} from "./../../../../../repository/OrderDynamoDBRepository";
+import {OrderStatus} from "../../../../../model/Models";
 import {Connection} from "typeorm";
-import {OrderWorkflowType} from "../../../../model/Models";
-import {APIGatewayProxyCustomEvent} from "../../../../model/HttpModels";
-import {getResponseFor} from "../../../../utils/HttpUtils";
-import {parseJSON} from "../../../../utils/Utils";
-import {NotFoundError} from "../../../../exception/Exceptions";
+import {OrderWorkflowType} from "../../../../../model/Models";
+import {APIGatewayProxyCustomEvent} from "../../../../../model/HttpModels";
+import {getResponseFor} from "../../../../../utils/HttpUtils";
+import {parseJSON} from "../../../../../utils/Utils";
+import {NotFoundError} from "../../../../../exception/Exceptions";
 import {APIGatewayProxyResult} from "aws-lambda";
 
-const database = new Database()
+const repository = new OrderDynamoDBRepository();
 export async function handler(event: APIGatewayProxyCustomEvent | APIGatewayProxyCustomEvent[]): Promise<APIGatewayProxyResult> {
 
     let dbConn: Connection;
@@ -22,13 +22,12 @@ export async function handler(event: APIGatewayProxyCustomEvent | APIGatewayProx
         let workflowOrderStatus = extractedEvent?.type;
 
         console.log("open db connection");
-        dbConn = await database.getConnection();
 
         if (workflowOrderStatus !== OrderWorkflowType.SHIPMENT_SUCCESS) {
             const orderStatus = OrderStatus.FAILURE;
             const causeMessage = parseJSON(extractedEvent?.Cause);
             parsedBody = parseJSON(causeMessage.errorMessage);
-            await updateOrderStatusById(dbConn, parsedBody.orderId, orderStatus);
+            await updateOrderStatusById(parsedBody.orderId, orderStatus);
             return getResponseFor(200, {
                 status: orderStatus,
                 errorMessage: causeMessage.errorMessage,
@@ -40,7 +39,7 @@ export async function handler(event: APIGatewayProxyCustomEvent | APIGatewayProx
 
         parsedBody = parseJSON(body);
         const orderStatus = OrderStatus.COMPLETED;
-        await updateOrderStatusById(dbConn, parsedBody.order.id, orderStatus);
+        await updateOrderStatusById(parsedBody.order.id, orderStatus);
 
         return getResponseFor(200, {
             status: orderStatus,
@@ -68,11 +67,15 @@ export async function handler(event: APIGatewayProxyCustomEvent | APIGatewayProx
     }
 }
 
-async function updateOrderStatusById(dbConn: Connection, orderId: number, orderStatus: OrderStatus) {
-    const orderRepository = dbConn.getRepository(Orders);
-    const orderToSave = await orderRepository.findOneBy({
-        id: orderId
+async function updateOrderStatusById(orderId: number, orderStatus: OrderStatus) {
+    const orderToSave = await repository.findOneBy({
+        AND: {
+            id: orderId
+        },
+        IN: {}
     });
+
+    console.log("updateOrderStatusById. await repository.findOneBy():", orderToSave);
 
     if (!orderToSave) {
         throw new NotFoundError("Order", [{
@@ -84,7 +87,7 @@ async function updateOrderStatusById(dbConn: Connection, orderId: number, orderS
     console.log(`Order: ${JSON.stringify(orderToSave)} by id: ${orderId}`);
 
     orderToSave.orderStatus = orderStatus;
-    const savedOrder = await orderRepository.save(orderToSave);
+    const savedOrder = await repository.save(orderToSave);
 
     console.log("saved Order: ", savedOrder);
 }

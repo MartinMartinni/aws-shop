@@ -1,11 +1,11 @@
 import {APIGatewayProxyResult, Context} from "aws-lambda";
 import {postPlaceOrder} from "./PostPlaceOrder";
-import {Database} from "../../../../component/Database";
-import {addCorsHeader} from "../../../../utils/HttpUtils";
-import {GeneralException} from "../../../../exception/Exceptions";
-import {APIGatewayProxyCustomEvent} from "../../../../model/HttpModels";
+import {Database} from "../../../../../component/Database";
+import {addCorsHeader} from "../../../../../utils/HttpUtils";
+import {GeneralException} from "../../../../../exception/Exceptions";
+import {APIGatewayProxyCustomEvent} from "../../../../../model/HttpModels";
 
-async function handler(event: APIGatewayProxyCustomEvent, context: Context) : Promise<APIGatewayProxyResult> {
+export async function handler(event: APIGatewayProxyCustomEvent, context: Context) : Promise<APIGatewayProxyResult> {
 
     let response: APIGatewayProxyResult;
     try {
@@ -26,5 +26,3 @@ async function handler(event: APIGatewayProxyCustomEvent, context: Context) : Pr
         });
     }
 }
-
-export {handler}

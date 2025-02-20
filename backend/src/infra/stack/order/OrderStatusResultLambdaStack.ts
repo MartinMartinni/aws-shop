@@ -26,7 +26,7 @@ export class OrderStatusResultLambdaStack extends Stack {
 
         this.lambdaFunction = new NodejsFunction(this, `OrderStatusResultLambda`, {
             functionName: `order-status-result-${suffix}`,
-            entry: (join(__dirname, "..", "..", "..", "services", "order", "onReturnOrderStatus.ts")),
+            entry: (join(process.cwd(), "src", "services", "order", "onReturnOrderStatus.ts")),
             environment: {
                 TABLE_CONNECTIONS_NAME: props.connectionsTable.tableName!
             },

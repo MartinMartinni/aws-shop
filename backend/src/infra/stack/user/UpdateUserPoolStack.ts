@@ -25,7 +25,7 @@ export class UpdateUserPoolStack extends Stack {
             functionName: `user-post-confirmation-trigger-update-user-pool-${suffix}`,
             runtime: Runtime.NODEJS_18_X,
             handler: "handler",
-            entry: (join(__dirname, "..", "..", "..", "services", "user", "update-user-pool", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services", "user", "update-user-pool", "handler.ts")),
             environment: {
                 USER_POOL_ID: props.userPool.userPoolId,
                 POST_CONFIRMATION_TRIGGER: props.postConfirmationLambdaFunction.functionArn,

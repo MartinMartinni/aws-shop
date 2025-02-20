@@ -30,11 +30,11 @@ export abstract class AbstractLambdaStepFunctionCaseStack extends Stack {
         })
     }
 
-    getLambdaInvoke() {
+    getLambdaInvoke(): tasks.LambdaInvoke {
         return this.lambdaInvoke;
     }
 
-    getLambdaFunction() {
+    getLambdaFunction(): lambda.Function {
         return this.lambdaFunction;
     }
 }

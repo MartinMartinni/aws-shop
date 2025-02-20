@@ -23,7 +23,7 @@ export class PaymentStepFunctionCaseStack extends AbstractLambdaStepFunctionCase
 
         this.lambdaFunction = this.createLambdaFunction(id, {
             functionName: `payment-case-${suffix}`,
-            entry: (join(__dirname, "..", "..", "..", "..", "services", "step-function", "payment", "handler.ts")),
+            entry: (join(process.cwd(), "src", "services", "step-function", "payment", "handler.ts")),
             environment: {
                 TABLE_USERS_NAME: props.userTable.tableName,
                 TABLE_USERS_BANK_ACCOUNT_HISTORY_NAME: props.userBankAccountHistoryTable.tableName
