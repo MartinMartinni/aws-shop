@@ -5,9 +5,6 @@ The project is a web application which is a shop based on AWS. The two parts are
 - [Backend](https://github.com/MartinMartinni/aws-shop/blob/main/backend/README.md) in AWS + CDK + TypeScript
 
 > :warning:  **The application will still be improved**
-#### In the near future I am expecting to add:
-- CI\CD
-- Tests
 
 ## Services which I am using:
 - Cognito
@@ -18,6 +15,7 @@ The project is a web application which is a shop based on AWS. The two parts are
 - DynamoDB
 - RDS
 - Amplify
+- CodePipeline (CICD)
 
 ## The most interesting part is place order:
 ![alt text](https://github.com/MartinMartinni/aws-shop/blob/main/place_order_workflow.drawio.png)
@@ -43,48 +41,17 @@ The project is a web application which is a shop based on AWS. The two parts are
 
 ## How to run APP:
 
-1.Go to the backend directory
+1.Execute command
 ```
-cd backend
+./launch-app.sh
 ```
+Script will:
+- deploy backend
+- deploy cicd pipelines
+- install dependencies, build ui
+- deploy ui
 
-2.Install dependencies
-```
-npm install
-```
-
-3.Deploy all stacks along with generating cdk-outputs.json file in the UI location, with information about provisioned infrastructure,
-which are imported for integration with backend app (without asking about grant access).
-```
-npm run deploy-all
-```
-
-4.Go to the UI directory
-```
-cd ./../ui/
-```
-
-5.Install dependencies
-```
-npm install
-```
-
-6.Build the UI
-```
-npm run build
-```
-
-7.Go to the backend directory
-```
-cd ./../backend
-```
-
-8.Deploy the UI
-```
-npm run deploy-ui
-```
-
-9.Find URL by:
+2.Find URL by:
 - from terminal under the key FinderUrl
 - in the file backend/cdk-outputs.json under the key FinderUrl
 
@@ -96,6 +63,29 @@ Paste it in the browser
 - Admin (can do that what can do user + managing products)
 
 > :warning:  **Don't forget to verify your email!!**
+
+## Run integration tests
+1.Go to the ui
+```
+cd ui
+```
+2.Run tests
+```
+npm test
+```
+
+Tests based on websockets, because the main ordering mechanism is based on them
+
+## Run pipelines with integration tests (CICD)
+1. Deploy the whole infrastructure. Check "How to run APP" 
+2. Edit the code, commit, push
+3. Pipelines will be triggered automatically. You can see the results in the AWS "CodePipeline" service
+
+### What pipelines do:
+- download source code from Github repo
+- build the code
+- run integration tests
+- deploy after manual approval
 
 ## How to stop App:
 Remember to choose "y" to continue process of removing resources
