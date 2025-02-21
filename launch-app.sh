@@ -12,6 +12,9 @@ npm run deploy-all
 cd ../ui
 pwd
 
+echo "npm install"
+npm install
+
 echo "npm run build"
 npm run build
 
