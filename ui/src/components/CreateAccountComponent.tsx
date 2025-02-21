@@ -14,7 +14,7 @@ const CreateAccountComponent: React.FC<CreateAccountComponentProps> = ({ authSer
         sub: "",
         name: "",
         email: "",
-        role: UserRole.USER,
+        role: UserRole.ADMIN,
         amountOfMoney: 0,
         password: ""
     });
