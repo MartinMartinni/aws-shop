@@ -128,8 +128,8 @@ const ManagingProductsComponent: React.FC<ManagingProductsComponentProps> = ({ p
         setEditedProduct(undefined);
     };
 
-    const handleRemoveProduct = (productId: string) => {
-        productService.deleteById(productId);
+    const handleRemoveProduct = async (productId: string) => {
+        await productService.deleteById(productId);
         fetchProducts()
     };
 

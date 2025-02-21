@@ -21,6 +21,7 @@ import {AbstractOrdeStack} from "./infra/stack/order/AbstractOrdeStack";
 import { ITable } from "aws-cdk-lib/aws-dynamodb";
 
 const ordersDBType = process.env.ORDERS_DB_TYPE?.toUpperCase() || "DYNAMO";
+const deployUi = process.env.DEPLOY_UI || false;
 
 console.log("process.env.ORDERS_DB_TYPE?.toUpperCase(): ", process.env.ORDERS_DB_TYPE?.toUpperCase());
 
@@ -86,6 +87,8 @@ const webSocketApiStack = new WebSocketApiStack(app, "WebSocketApiStack", {
     orderStatusResultLambda: orderStatusResultLambdaStack.lambdaFunction
 });
 
-const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");
+if (deployUi) {
+    const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");
+}
 
 const cicdPipelinesStack = new CICDPipelinesStack(app, "CICDPipelinesStack");
