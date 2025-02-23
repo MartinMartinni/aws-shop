@@ -26,7 +26,8 @@ export class CICDPipelinesStack extends Stack {
             branch: "main",
             // trigger: GitHubTrigger.WEBHOOK,
             connectionArn: "arn:aws:codeconnections:eu-north-1:980921732442:connection/bc99edf1-2fd6-42cc-b177-ca1763176267",
-            codeBuildCloneOutput: true
+            codeBuildCloneOutput: true,
+            triggerOnPush: true
         });
       
         const buildOutput = new Artifact();
