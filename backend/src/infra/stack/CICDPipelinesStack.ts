@@ -21,11 +21,12 @@ export class CICDPipelinesStack extends Stack {
             actionName: "GitHub_Source",
             owner: "MartinMartinni",
             repo: "aws-shop",
-            oauthToken: SecretValue.secretsManager("github-token"),
+            // oauthToken: SecretValue.secretsManager("github-token"),
             output: sourceOutput,
             branch: "main",
-            trigger: GitHubTrigger.WEBHOOK,
-            triggerOnPush
+            // trigger: GitHubTrigger.WEBHOOK,
+            connectionArn: "arn:aws:codeconnections:eu-north-1:980921732442:connection/bc99edf1-2fd6-42cc-b177-ca1763176267",
+            codeBuildCloneOutput: true
         });
       
         const buildOutput = new Artifact();
