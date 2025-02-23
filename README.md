@@ -79,7 +79,7 @@ Tests based on websockets, because the main ordering mechanism is based on them
 ## Run pipelines with integration tests (CICD)
 1. Deploy the whole infrastructure. Check "How to run APP" 
 2. Edit the code, commit, push
-3. Pipelines will be triggered automatically. You can see the results in the AWS "CodePipeline" service
+3. Pipelines will be triggered automatically after merge to the master. You can see the results in the AWS "CodePipeline" service
 
 ### What pipelines do:
 - download source code from Github repo

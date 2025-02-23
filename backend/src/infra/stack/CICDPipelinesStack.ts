@@ -2,7 +2,7 @@ import {SecretValue, Stack, StackProps, RemovalPolicy} from "aws-cdk-lib";
 import {Bucket} from "aws-cdk-lib/aws-s3";
 import {Artifact, Pipeline,} from "aws-cdk-lib/aws-codepipeline";
 import {Construct} from "constructs";
-import {GitHubSourceAction, CodeBuildAction, ManualApprovalAction, GitHubTrigger, CodeStarConnectionsSourceAction} from "aws-cdk-lib/aws-codepipeline-actions";
+import {GitHubSourceAction, CodeBuildAction, ManualApprovalAction} from "aws-cdk-lib/aws-codepipeline-actions";
 import {BuildSpec, PipelineProject, LinuxBuildImage} from "aws-cdk-lib/aws-codebuild";
 
 export class CICDPipelinesStack extends Stack {
@@ -17,17 +17,13 @@ export class CICDPipelinesStack extends Stack {
         });
       
         const sourceOutput = new Artifact();
-        const sourceAction = new CodeStarConnectionsSourceAction({
+        const sourceAction = new GitHubSourceAction({
             actionName: "GitHub_Source",
             owner: "MartinMartinni",
             repo: "aws-shop",
-            // oauthToken: SecretValue.secretsManager("github-token"),
+            oauthToken: SecretValue.secretsManager("github-token"),
             output: sourceOutput,
-            branch: "main",
-            // trigger: GitHubTrigger.WEBHOOK,
-            connectionArn: "arn:aws:codeconnections:eu-north-1:980921732442:connection/bc99edf1-2fd6-42cc-b177-ca1763176267",
-            codeBuildCloneOutput: true,
-            triggerOnPush: true
+            branch: "main"
         });
       
         const buildOutput = new Artifact();
