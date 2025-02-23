@@ -23,7 +23,7 @@ export class CICDPipelinesStack extends Stack {
             repo: "aws-shop",
             oauthToken: SecretValue.secretsManager("github-token"),
             output: sourceOutput,
-            branch: "main"
+            branch: "develop"
         });
       
         const buildOutput = new Artifact();
