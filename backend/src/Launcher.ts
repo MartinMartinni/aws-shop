@@ -4,7 +4,7 @@ import * as cdk from "aws-cdk-lib";
 import { ApiStack as ApiStack } from "./infra/stack/ApiStack";
 import {AuthStack} from "./infra/stack/AuthStack";
 import {FinderPhotosBucket} from "./infra/stack/FinderPhotosBucket";
-import {RdsInitStack, RdsConfig} from "../docker/db-init/RdsInitStack";
+import {RdsInitStack} from "../docker/db-init/RdsInitStack";
 import {StepFunctionOrderWorkflowStack} from "./infra/stack/step-function/StepFunctionOrderWorkflowStack";
 import {OrderStatusEventBridgeStack} from "./infra/stack/order/OrderStatusEventBridgeStack";
 import {OrderStatusResultLambdaStack} from "./infra/stack/order/OrderStatusResultLambdaStack";
@@ -15,10 +15,11 @@ import {InitializerDataLambdaStack} from "./infra/stack/init/InitializerDataLamb
 import {UiDeploymentStack} from "./infra/stack/UiDeploymentStack";
 import {OrderLambdaRDSStack} from "./infra/stack/order/OrderLambdaRDSStack";
 import {OrderLambdaDynamoStack} from "./infra/stack/order/OrderLambdaDynamoStack";
-import {CICDPipelinesStack} from "./infra/stack/CICDPipelinesStack";
+import {CICDPipelinesMainStack} from "./infra/stack/cicd/CICDPipelinesMainStack";
 
 import {AbstractOrdeStack} from "./infra/stack/order/AbstractOrdeStack";
 import { ITable } from "aws-cdk-lib/aws-dynamodb";
+import { CICDPipelinesDevelopStack } from "./infra/stack/cicd/CICDPipelinesDevelopStack";
 
 const ordersDBType = process.env.ORDERS_DB_TYPE?.toUpperCase() || "DYNAMO";
 const deployUi = process.env.DEPLOY_UI || false;
@@ -91,4 +92,5 @@ if (deployUi) {
     const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");
 }
 
-const cicdPipelinesStack = new CICDPipelinesStack(app, "CICDPipelinesStack");
+const cicdPipelinesDevelopStack = new CICDPipelinesDevelopStack(app, "CICDPipelinesDevelopStack");
+const cicdPipelinesMainStack = new CICDPipelinesMainStack(app, "CICDPipelinesMainStack");
