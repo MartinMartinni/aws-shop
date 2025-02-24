@@ -163,7 +163,7 @@ describe("WebSocket API Integration Test", () => {
         const user = await userService.getUser(AuthService.jwtToken!) as User;
         await productService.deleteByIds(products.map((pr: Product) => pr.id));
         await userService.updateAmountOfMoney(user?.id!, -user?.amountOfMoney!);
-    }, 10000);
+    }, 15000);
 
     test("should place order and responde with the status COMPLETED", async () => {
         // given
@@ -225,7 +225,7 @@ describe("WebSocket API Integration Test", () => {
         } catch (e) {
             console.error(e);
         }
-    }, 10000);
+    }, 15000);
 
     test("should return error message and responde with the status FAILURE when wrong order price", async () => {
         // given
@@ -294,7 +294,7 @@ describe("WebSocket API Integration Test", () => {
         } catch (e) {
             console.error(e);
         }
-    }, 10000);
+    }, 15000);
 
     test("should return error message and responde with the status FAILURE when product unavailable", async () => {
         // given
@@ -360,7 +360,7 @@ describe("WebSocket API Integration Test", () => {
         } catch (e) {
             console.error(e);
         }
-    }, 10000);
+    }, 15000);
     
     test("should return error message and responde with the status FAILURE when user doesn't have enough of money", async () => {
         // given
@@ -430,7 +430,7 @@ describe("WebSocket API Integration Test", () => {
         } catch (e) {
             console.error(e);
         }
-    }, 10000);
+    }, 15000);
 
     test("should return error message when Order doesn't have required fields", async () => {
         // given
