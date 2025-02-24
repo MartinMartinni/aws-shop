@@ -1,7 +1,12 @@
 #!/bin/sh
 
-echo "export ORDERS_DB_TYPE=DYNAMO"
-export ORDERS_DB_TYPE=DYNAMO
+ORDERS_DB_TYPE="${1:-DYNAMO}"
+
+if [ $ORDERS_DB_TYPE != "RDS" ]
+then
+    export ORDERS_DB_TYPE=DYNAMO
+fi
+echo "exported value" $ORDERS_DB_TYPE
 
 cd ./backend
 pwd

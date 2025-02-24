@@ -28,6 +28,9 @@
   "StepFunctionOrderWorkflowStackShipmentStepFunctionCaseStack82AFFB40": {
     "ExportsOutputFnGetAttShipmentStepFunctionCaseStackCaseLambda99DEC739Arn26D765F5": "arn:aws:lambda:eu-central-1:980921732442:function:shipment-case-0230e669e751"
   },
+  "UiDeploymentStack": {
+    "FinderUrl": "d2wu87a5jpj79b.cloudfront.net"
+  },
   "AuthStack": {
     "ExportsOutputFnGetAttUserPool6BA7E5F2Arn686ACC00": "arn:aws:cognito-idp:eu-central-1:980921732442:userpool/eu-central-1_Vq9JBOEzX",
     "UserPoolClientId": "43q8l230agsqgq47ijdadn7osq",
@@ -43,9 +46,6 @@
   },
   "StepFunctionOrderWorkflowStackWarehouseRevertStepFunctionCaseStackC12701ED": {
     "ExportsOutputFnGetAttWarehouseRevertStepFunctionCaseStackCaseLambda2B522EB8ArnDCBC6F04": "arn:aws:lambda:eu-central-1:980921732442:function:warehouse-revert-02d5d3762863"
-  },
-  "UiDeploymentStack": {
-    "FinderUrl": "d2wu87a5jpj79b.cloudfront.net"
   },
   "StepFunctionOrderWorkflowStackOrderFinalizationStepFunctionCaseDynamoStack21B884E3": {
     "ExportsOutputFnGetAttConnectionsTable8000B8A1Arn6FD6777C": "arn:aws:dynamodb:eu-central-1:980921732442:table/connection-06f7899bf47f",
