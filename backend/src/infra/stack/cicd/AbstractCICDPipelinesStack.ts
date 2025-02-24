@@ -2,15 +2,22 @@ import {SecretValue, Stack, StackProps, RemovalPolicy} from "aws-cdk-lib";
 import {Bucket} from "aws-cdk-lib/aws-s3";
 import {Artifact, Pipeline,} from "aws-cdk-lib/aws-codepipeline";
 import {Construct} from "constructs";
-import {GitHubSourceAction, CodeBuildAction, ManualApprovalAction} from "aws-cdk-lib/aws-codepipeline-actions";
+import {GitHubSourceAction, CodeBuildAction} from "aws-cdk-lib/aws-codepipeline-actions";
 import {BuildSpec, PipelineProject, LinuxBuildImage} from "aws-cdk-lib/aws-codebuild";
 
-export class CICDPipelinesStack extends Stack {
+export interface AbstractCICDPipelinesStackProps extends StackProps {
+    suffix: string,
+    branch: string
+}
 
-    constructor(scope: Construct, id: string, props?: StackProps) {
+export abstract class AbstractCICDPipelinesStack extends Stack {
+
+    protected pipeline: Pipeline;
+
+    constructor(scope: Construct, id: string, props: AbstractCICDPipelinesStackProps) {
         super(scope, id, props);
 
-        const artifactBucket = new Bucket(this, "ArtifactBucket", {
+        const artifactBucket = new Bucket(this, "ArtifactBucket" + props.suffix, {
             versioned: true,
             removalPolicy: RemovalPolicy.DESTROY,
             autoDeleteObjects: true,
@@ -21,13 +28,13 @@ export class CICDPipelinesStack extends Stack {
             actionName: "GitHub_Source",
             owner: "MartinMartinni",
             repo: "aws-shop",
-            oauthToken: SecretValue.secretsManager("github-token"),
+            oauthToken: SecretValue.secretsManager("github-token2"),
             output: sourceOutput,
-            branch: "main"
+            branch: props.branch
         });
       
         const buildOutput = new Artifact();
-        const buildProject = new PipelineProject(this, "BuildProject", {
+        const buildProject = new PipelineProject(this, "BuildProject" + props.suffix, {
             environment: {
                 buildImage: LinuxBuildImage.STANDARD_7_0,// Node.js 18+
             },
@@ -55,7 +62,7 @@ export class CICDPipelinesStack extends Stack {
             outputs: [buildOutput],
         });
       
-        const testProject = new PipelineProject(this, "TestProject", {
+        const testProject = new PipelineProject(this, "TestProject" + props.suffix, {
             environment: {
                 buildImage: LinuxBuildImage.STANDARD_7_0,// Node.js 18+
             },
@@ -77,13 +84,8 @@ export class CICDPipelinesStack extends Stack {
             input: buildOutput,
         });
       
-        const deployAction = new ManualApprovalAction({
-            actionName: "Approve_Deploy",
-            runOrder: 1,
-        });
-      
-        new Pipeline(this, "MyPipeline", {
-        pipelineName: "Pipeline",
+        this.pipeline = new Pipeline(this, "MyPipeline" + props.suffix, {
+        pipelineName: "Pipeline" + props.suffix,
         artifactBucket,
         stages: [
             {
@@ -97,11 +99,7 @@ export class CICDPipelinesStack extends Stack {
             {
                 stageName: "Test",
                 actions: [testAction],
-            },
-            {
-                stageName: "Deploy",
-                actions: [deployAction],
-            },
+            }
         ]});
     }
 }
