@@ -41,11 +41,21 @@ The project is a web application which is a shop based on AWS. The two parts are
 
 ## How to run APP:
 
-1.Execute command
+1.Run app:
+
+You can run app in two configurations for orders:
+
+- no-sql DYNAMO db
 ```
 ./launch-app.sh
 ```
+- sql - relation database (RDS) db
+```
+./launch-app.sh RDS
+```
+
 Script will:
+- run db (DYNAMO/RDS)
 - deploy backend
 - deploy cicd pipelines
 - install dependencies, build ui
