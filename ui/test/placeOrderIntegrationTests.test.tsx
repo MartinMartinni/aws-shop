@@ -288,9 +288,11 @@ describe("WebSocket API Integration Test", () => {
                 expect(+exception.frontend).toEqual(price);
                 expect(+exception.backend).toEqual(backendPriceInTotal);
                 expect(exception.name).toEqual("WrongOrderPriceError");
-                // expect(exception.message).toEqual(`Order prices provided: \"${price + ".00"}\" and calculated: \"${backendPriceInTotal}\" are not the same!`);
-                expect(exception.message).toEqual(`Order prices provided: \"${price}\" and calculated: \"${backendPriceInTotal}\" are not the same!`);
-            });
+
+                // expect(exception.message).toEqual(`Order prices provided: \"${price}\" and calculated: \"${backendPriceInTotal}\" are not the same!`);
+                expect(exception.message).toMatch(new RegExp(`^Order prices provided: \"${price}\"`));
+                expect(exception.message).toMatch(new RegExp(`and calculated: \"${backendPriceInTotal}\" are not the same\!$`));
+            })
         } catch (e) {
             console.error(e);
         }
