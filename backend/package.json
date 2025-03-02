@@ -8,7 +8,7 @@
     "test": "jest",
     "cdk": "cdk",
     "deploy-all": "cdk deploy --all --require-approval never --outputs-file ./../ui/cdk-outputs.json",
-    "destroy-all": "cdk destroy UserStack/UserPostConfirmationTriggerLambdaStack/UserPostConfirmationTriggerUpdateUserPoolLambdaStack OrderStatusResultLambdaStack AuthStack && cdk destroy --all"
+    "destroy-all": "cdk destroy UserStack/UserPostConfirmationTriggerLambdaStack/UserPostConfirmationTriggerUpdateUserPoolLambdaStack OrderStatusResultLambdaStack AuthStack --force && cdk destroy --all --force"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",

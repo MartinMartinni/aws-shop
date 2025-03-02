@@ -30,17 +30,17 @@ export class WebSocketApiStack extends Stack {
         }
 
         const onConnectHandler = new NodejsFunction(this, "OnConnectHandler", {
-            entry: join(__dirname, "..", "..", "services", "websocket", "OnConnect.ts"),
+            entry: join(process.cwd(), "src", "services", "websocket", "OnConnect.ts"),
             ...nodeJsFunctionProps
         });
 
         const onDisconnectHandler = new NodejsFunction(this, "OnDisconnectHandler", {
-            entry: join(__dirname, "..", "..", "services", "websocket", "ondisconnect.ts"),
+            entry: join(process.cwd(), "src", "services", "websocket", "ondisconnect.ts"),
             ...nodeJsFunctionProps
         });
 
         const onMessageHandler = new NodejsFunction(this, "OnMessageHandler", {
-            entry: join(__dirname, "..", "..", "services", "websocket", "onMessage.ts"),
+            entry: join(process.cwd(), "src", "services", "websocket", "onMessage.ts"),
             ...nodeJsFunctionProps
         });
 
