@@ -21,7 +21,7 @@ export abstract class AbstractUiDeploymentStack extends Stack {
             bucketName: `ui-${suffix}`
         });
 
-        const uiDir = join(__dirname, '..', '..', '..', '..', 'ui', 'dist');
+        const uiDir = join(process.cwd(), "..", "ui", "dist");
         if (!existsSync(uiDir)) {
             console.warn('Ui dir not found: ' + uiDir);
             return;
