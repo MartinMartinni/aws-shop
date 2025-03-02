@@ -14,7 +14,7 @@ const CreateAccountComponent: React.FC<CreateAccountComponentProps> = ({ authSer
         sub: "",
         name: "",
         email: "",
-        role: UserRole.ADMIN,
+        role: UserRole.USER,
         amountOfMoney: 0,
         password: ""
     });
@@ -172,12 +172,14 @@ const CreateAccountComponent: React.FC<CreateAccountComponentProps> = ({ authSer
                         </Form.Group>
                         <Form.Group className="mb-2">
                             <Form.Label>Role</Form.Label>
-                            <Form.Select aria-label="Default select" onChange={handleUserRoleChange} defaultValue={UserRole.ADMIN}>
-                                {Object.keys(UserRole).map((key, index) => (
+                            <Form.Select aria-label="Default select" onChange={handleUserRoleChange} defaultValue={UserRole.USER}>
+                                {/* Only for me */}
+                                {/* {Object.keys(UserRole).map((key, index) => (
                                     <option key={index} value={key}>
                                         {key}
                                     </option>
-                                ))}
+                                ))} */}
+                                {<option key={0} value={UserRole.USER}>{UserRole.USER}</option>}
                             </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-2">

@@ -69,5 +69,13 @@
   "security-group:account=497565833070:region=eu-west-2:securityGroupId=sg-01a195f8f069700ff": {
     "securityGroupId": "sg-01a195f8f069700ff",
     "allowAllOutbound": false
+  },
+  "hosted-zone:account=980921732442:domainName=aws-shop.click:region=eu-central-1": {
+    "Id": "/hostedzone/Z093887315V2MLZ5GDW6W",
+    "Name": "aws-shop.click."
+  },
+  "hosted-zone:account=980921732442:domainName=aws-shop.click:region=us-east-1": {
+    "Id": "/hostedzone/Z093887315V2MLZ5GDW6W",
+    "Name": "aws-shop.click."
   }
 }

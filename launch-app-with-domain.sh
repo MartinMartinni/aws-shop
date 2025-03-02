@@ -30,5 +30,8 @@ pwd
 echo "export DEPLOY_UI=true"
 export DEPLOY_UI=true
 
+echo "export DOMAIN=aws-shop.click"
+export DOMAIN=aws-shop.click
+
 echo "npm run deploy-all"
 npm run deploy-all

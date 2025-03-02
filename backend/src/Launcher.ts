@@ -12,7 +12,6 @@ import {WebSocketApiStack} from "./infra/stack/WebSocketApiStack";
 import {UserStack} from "./infra/stack/user/UserStack";
 import {ProductStack} from "./infra/stack/product/ProductStack";
 import {InitializerDataLambdaStack} from "./infra/stack/init/InitializerDataLambdaStack";
-import {UiDeploymentStack} from "./infra/stack/UiDeploymentStack";
 import {OrderLambdaRDSStack} from "./infra/stack/order/OrderLambdaRDSStack";
 import {OrderLambdaDynamoStack} from "./infra/stack/order/OrderLambdaDynamoStack";
 import {CICDPipelinesMainStack} from "./infra/stack/cicd/CICDPipelinesMainStack";
@@ -20,10 +19,15 @@ import {CICDPipelinesMainStack} from "./infra/stack/cicd/CICDPipelinesMainStack"
 import {AbstractOrdeStack} from "./infra/stack/order/AbstractOrdeStack";
 import { ITable } from "aws-cdk-lib/aws-dynamodb";
 import { CICDPipelinesDevelopStack } from "./infra/stack/cicd/CICDPipelinesDevelopStack";
+import { UiDeploymentWithDomainStack } from "./infra/stack/UiDeploymentWithDomainStack";
+import { UiDeploymentPureStack } from "./infra/stack/UiDeploymentPureStack";
 
 const ordersDBType = process.env.ORDERS_DB_TYPE?.toUpperCase() || "DYNAMO";
-const deployUi = process.env.DEPLOY_UI || false;
+const deployUi = process.env.DEPLOY_UI ? JSON.parse(process.env.DEPLOY_UI.toLowerCase()) : false;
+const domain = process.env.DOMAIN;
 
+console.log("process.env.DEPLOY_UI: ", process.env.DEPLOY_UI, ", deployUi: ", deployUi);
+console.log("process.env.DOMAIN: ", process.env.DOMAIN);
 console.log("process.env.ORDERS_DB_TYPE?.toUpperCase(): ", process.env.ORDERS_DB_TYPE?.toUpperCase());
 
 const app = new cdk.App();
@@ -88,8 +92,20 @@ const webSocketApiStack = new WebSocketApiStack(app, "WebSocketApiStack", {
     orderStatusResultLambda: orderStatusResultLambdaStack.lambdaFunction
 });
 
-if (deployUi) {
-    const uiDeploymentStack = new UiDeploymentStack(app, "UiDeploymentStack");
+if (deployUi) {        
+    if (domain) {
+        const env = {
+            account: process.env.CDK_DEFAULT_ACCOUNT,
+            region: "us-east-1"  // only option to create ssl certificate
+        };
+
+        new UiDeploymentWithDomainStack(app, "UiDeploymentWithDomainStack", {
+            env: env,
+            domain: domain!
+        });
+    } else {
+        new UiDeploymentPureStack(app, "UiDeploymentPureStack");
+    }
 }
 
 const cicdPipelinesDevelopStack = new CICDPipelinesDevelopStack(app, "CICDPipelinesDevelopStack");
