@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
 import {ProductDynamoDBRepository} from "../repository/ProductDynamoDBRepository";
+import { CognitoIdentityProviderClient, SignUpCommand, SignUpCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import {
     addCorsHeader,
     getErrorResponse, getResponseFor
@@ -31,7 +32,9 @@ import zeroImg from "./assets/zero_skull.jpg";
 const repository = new ProductDynamoDBRepository();
 const photoBucket = process.env.BUCKET_PHOTO_NAME!;
 
-async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<APIGatewayProxyResult> {
+const client = new CognitoIdentityProviderClient({ region: process.env.REGION });
+
+export async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<APIGatewayProxyResult> {
 
     console.log("Incoming request: " + event.path + " \n" +
         "- queryParameters: " + JSON.stringify(event.queryStringParameters) + "\n" +
@@ -42,6 +45,40 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
     const s3 = new AWS.S3();
 
     try {
+        const users = [
+            {
+                ClientId: process.env.CLIENT_ID,
+                Username: "MichalKowalski",
+                Password: "MichalKowalski!#1",
+                UserAttributes: [
+                    { Name: "email", Value: "michal.kowalski@test.com" },
+                    { Name: "custom:role", Value: "USER" },
+                    { Name: "custom:amountOfMoney", Value: "1000" },
+                    { Name: "custom:domain", Value: "test.com" }
+                ]
+            },
+            {
+                ClientId: process.env.CLIENT_ID,
+                Username: "KamilKowalski",
+                Password: "KamilKowalski!$1",
+                UserAttributes: [
+                    { Name: "email", Value: "kamil.kowalski@test.com" },
+                    { Name: "custom:role", Value: "USER" },
+                    { Name: "custom:amountOfMoney", Value: "1000" },
+                    { Name: "custom:domain", Value: "test.com" }
+                ]
+            }
+        ] as SignUpCommandInput[];
+
+        const savedUsers = await Promise.allSettled(
+            users.map(async (user) => {
+                const command = new SignUpCommand(user);
+                return await client.send(command);
+            })
+        );
+
+        console.log("Saved users: ", savedUsers);
+
         const products: ProductEntity[] = [
             {
                 id: "",
@@ -139,9 +176,9 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
             product.img = uploadedImg.Location;
         }
 
-        console.log("products to save: ", products);
-
         const savedProducts = await repository.saveAll(products);
+
+        console.log("Saved products: ", products);
 
         response = getResponseFor(201, savedProducts);
     } catch (e) {
@@ -153,5 +190,3 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
     addCorsHeader(response);
     return response;
 }
-
-export {handler};

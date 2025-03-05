@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, {useEffect, useState} from "react";
-import {Form, Button, Row, Alert} from "react-bootstrap";
+import {Form, Button, Row, Alert, Table} from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import {Link, Navigate} from "react-router-dom";
 import {AuthService} from "../services/AuthService.ts";
@@ -89,6 +89,35 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ props }) => {
     return (
         <Container>
             {loginSuccess && <Navigate to="/ordering-products" replace={true} />}
+            <Row className="justify-content-center mt-5">
+                <Table bordered>
+                    <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Surname</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Michal</td>
+                            <td>Kowalski</td>
+                            <td>michal.kowalski@test.com</td>
+                            <td>MichalKowalski!#1</td>
+                            <td>USER</td>
+                        </tr>
+                        <tr>
+                            <td>Kamil</td>
+                            <td>Kowalski</td>
+                            <td>kamil.kowalski@test.com</td>
+                            <td>KamilKowalski!$1</td>
+                            <td>USER</td>
+                        </tr>
+                    </tbody>
+                </Table>
+            </Row>
             <Row className="justify-content-center mt-5">
                 <Form onSubmit={handleSubmit} className="bg-light p-5 rounded mt-5" style={{ width: "500px", height: "500px" }}>
                     <h2 className="text-center mb-4">Login</h2>

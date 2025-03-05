@@ -20,7 +20,7 @@ export class AuthStack extends Stack {
 
     public static ADMIN_GROUP_NAME = "admins";
     public userPool: UserPool;
-    private userPoolClient: UserPoolClient;
+    public userPoolClient: UserPoolClient;
     private identityPool: CfnIdentityPool;
     private authenticatedRole: Role;
     private unAuthenticatedRole: Role;
