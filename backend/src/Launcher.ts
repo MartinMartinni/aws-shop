@@ -40,7 +40,8 @@ const productStack = new ProductStack(app, "ProductStack");
 
 const initializerDataLambdaStack = new InitializerDataLambdaStack(app, "InitializerDataLambdaStack", {
     productTable: productStack.productTable,
-    photoBucket: finderPhotosBucket.photoBucket
+    photoBucket: finderPhotosBucket.photoBucket,
+    userPoolClientId: authStack.userPoolClient.userPoolClientId
 });
 
 let rdsInitStack = {} as RdsInitStack;
