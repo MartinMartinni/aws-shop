@@ -11,7 +11,8 @@ import {Bucket} from "aws-cdk-lib/aws-s3";
 
 export interface InitializerDataLambdaStackProps extends StackProps {
     productTable: ITable
-    photoBucket: Bucket
+    photoBucket: Bucket,
+    userPoolClientId: string
 }
 
 export class InitializerDataLambdaStack extends Stack {
@@ -28,7 +29,9 @@ export class InitializerDataLambdaStack extends Stack {
             entry: (join(process.cwd(), "src", "services", "init", "handler.ts")),
             environment: {
                 TABLE_PRODUCTS_NAME: props.productTable.tableName,
-                BUCKET_PHOTO_NAME: props.photoBucket.bucketName
+                BUCKET_PHOTO_NAME: props.photoBucket.bucketName,
+                REGION: this.region,
+                CLIENT_ID: props.userPoolClientId
             },
             tracing: Tracing.ACTIVE,
             timeout: Duration.minutes(1),
