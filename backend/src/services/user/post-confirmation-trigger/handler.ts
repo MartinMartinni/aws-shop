@@ -41,7 +41,7 @@ export async function handler(event: SignupCognitoUserEvent, context: Context) :
                 return response;
             }
 
-            await userDynamoDBRepository.save({
+            const savedResult = await userDynamoDBRepository.save({
                 id: "",
                 sub: userAttributes.sub,
                 name: event.userName,
@@ -52,7 +52,11 @@ export async function handler(event: SignupCognitoUserEvent, context: Context) :
                 createdAt: ""
             });
 
+            console.log("savedResult: ", savedResult);
+
             const savedUser = await userDynamoDBRepository.findByEmail(userAttributes.email);
+
+            console.log("savedUser: ", savedUser);
 
             if (!savedUser) {
                 throw new NotFoundError("User", [{

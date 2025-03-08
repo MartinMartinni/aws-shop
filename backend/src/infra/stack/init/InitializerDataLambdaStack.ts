@@ -8,11 +8,13 @@ import {getSuffixFromStack} from "../utils/Utils";
 import {ITable} from "aws-cdk-lib/aws-dynamodb";
 import {AwsCustomResource, AwsCustomResourcePolicy, AwsSdkCall, PhysicalResourceId} from "aws-cdk-lib/custom-resources";
 import {Bucket} from "aws-cdk-lib/aws-s3";
+import { UserPool } from "aws-cdk-lib/aws-cognito";
 
 export interface InitializerDataLambdaStackProps extends StackProps {
     productTable: ITable
     photoBucket: Bucket,
-    userPoolClientId: string
+    userPoolClientId: string,
+    userPool: UserPool
 }
 
 export class InitializerDataLambdaStack extends Stack {
@@ -41,12 +43,21 @@ export class InitializerDataLambdaStack extends Stack {
         });
 
         props.photoBucket.grantPut(lambda);
+        props.userPool.grant(lambda)
 
         lambda.addToRolePolicy(new PolicyStatement({
             effect: Effect.ALLOW,
             resources: [props.productTable.tableArn],
             actions: [
                 "dynamodb:PutItem"
+            ]
+        }));
+
+        lambda.addToRolePolicy(new PolicyStatement({
+            effect: Effect.ALLOW,
+            resources: [props.userPool.userPoolArn],
+            actions: [
+                "cognito-idp:SignUp"
             ]
         }));
 

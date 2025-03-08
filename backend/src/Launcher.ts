@@ -38,11 +38,18 @@ const authStack = new AuthStack(app, "AuthStack", {
 
 const productStack = new ProductStack(app, "ProductStack");
 
+const userStack = new UserStack(app, "UserStack", {
+    userPool: authStack.userPool
+});
+
 const initializerDataLambdaStack = new InitializerDataLambdaStack(app, "InitializerDataLambdaStack", {
     productTable: productStack.productTable,
     photoBucket: finderPhotosBucket.photoBucket,
-    userPoolClientId: authStack.userPoolClient.userPoolClientId
+    userPoolClientId: authStack.userPoolClient.userPoolClientId,
+    userPool: authStack.userPool
 });
+// Let's make sure that the updateUserPoolStack(permissions for pre, post) is created first
+initializerDataLambdaStack.addDependency(userStack.updateUserPoolStack);
 
 let rdsInitStack = {} as RdsInitStack;
 let orderStack = {} as AbstractOrdeStack;
@@ -57,10 +64,6 @@ if (ordersDBType === "RDS") {
     orderTable = orderLambdaStack.orderTable;
     orderStack = orderLambdaStack;
 }
-
-const userStack = new UserStack(app, "UserStack", {
-    userPool: authStack.userPool
-});
 
 const eventBridgeStack = new OrderStatusEventBridgeStack(app, "EventBridgeStack");
 

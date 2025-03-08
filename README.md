@@ -67,10 +67,15 @@ Script will:
 
 Paste it in the browser
 
+## Login on exising user
+Choose user from login screen (table) and login
+
 ## Create user account:
-1.Go to the login page and click "Create account". You can create user for two roles:
+Go to the login page and click "Create account"
 - User (placing order)
-- Admin (can do that what can do user + managing products)
+
+Blocked:
+- Admin (can do that what can do user + managing products).
 
 > :warning:  **Don't forget to verify your email!!**
 
@@ -102,9 +107,8 @@ You can see the results in the AWS "CodePipeline" service.
 - deploy after manual approval
 
 ## How to stop App:
-Remember to choose "y" to continue process of removing resources
 ```
-npm run destroy-all
+./delete-app.sh
 ```
 
 ## Useful links:

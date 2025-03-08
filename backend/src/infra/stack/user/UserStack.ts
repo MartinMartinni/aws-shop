@@ -20,6 +20,7 @@ export class UserStack extends Stack {
     public readonly userBankAccountHistoryTable: ITable;
     public readonly userCreditBankAccountLambdaIntegration: LambdaIntegration;
     public readonly userLambdaIntegration: LambdaIntegration;
+    public readonly updateUserPoolStack: UpdateUserPoolStack;
 
     constructor(scope: Construct, id: string, props: UserStackProps) {
         super(scope, id, props);
@@ -43,7 +44,7 @@ export class UserStack extends Stack {
             userPool: props.userPool
         });
 
-        const updateUserPoolStack = new UpdateUserPoolStack(this, "UpdateUserPoolStack", {
+        this.updateUserPoolStack = new UpdateUserPoolStack(this, "UpdateUserPoolStack", {
             userPool: props.userPool,
             postConfirmationLambdaFunction: userPostConfirmationTriggerLambdaStack.postConfirmationLambdaFunction,
             preSignUpLambdaFunction: userPreSignUpTriggerLambdaStack.preSignUpLambdaFunction
