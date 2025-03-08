@@ -1,6 +1,6 @@
 import { Stack, StackProps } from "aws-cdk-lib";
 import { Certificate, CertificateValidation, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
-import { HostedZone, IHostedZone } from "aws-cdk-lib/aws-route53";
+import { HostedZone, IHostedZone, PublicHostedZone } from "aws-cdk-lib/aws-route53";
 import { Construct } from "constructs";
 
 export interface CertificateSslStackProps extends StackProps {
@@ -15,9 +15,13 @@ export class CertificateSslStack extends Stack {
     constructor(scope: Construct, id: string, props: CertificateSslStackProps) {
         super(scope, id, props);
         
-        this.hostedZone = HostedZone.fromLookup(this, "HostedZone", {
-            domainName: props.domain,
+        this.hostedZone = new PublicHostedZone(this, "HostedZone", {
+            zoneName: props.domain
         });
+
+        // this.hostedZone = HostedZone.fromLookup(this, "HostedZone", {
+        //     domainName: props.domain
+        // });
 
         const cert = CertificateValidation.fromDns(this.hostedZone);
 
